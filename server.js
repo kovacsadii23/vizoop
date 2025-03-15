@@ -38,6 +38,15 @@ function sendJavaFile(res, filePath) {
         }
     });
 }
+function sendCSFile(res, filePath) {
+    fs.readFile(filePath, 'utf8', (err, data) => {
+        if (err) {
+            res.status(404).send('CSharp file not found');
+        } else {
+            res.send(data);
+        }
+    });
+}
 app.post('/save-java', (req, res) => {
     const { fileName, content } = req.body;
     const filePath = path.join(__dirname, 'saved_classes', fileName);
@@ -131,10 +140,10 @@ app.get('/java-code/delivery_car', (req, res) => sendJavaFile(res, path.join(__d
 app.get('/java-code/off_road', (req, res) => sendJavaFile(res, path.join(__dirname, 'java_src', 'OffRoad.java')));
 app.get('/java-code/race_car', (req, res) => sendJavaFile(res, path.join(__dirname, 'java_src', 'RaceCar.java')));
 
-app.get('/cs-code/cars', (req, res) => sendJavaFile(res, path.join(__dirname, 'cs_src', 'Cars.cs')));
-app.get('/cs-code/delivery_car', (req, res) => sendJavaFile(res, path.join(__dirname, 'cs_src', 'DeliveryCar.cs')));
-app.get('/cs-code/off_road', (req, res) => sendJavaFile(res, path.join(__dirname, 'cs_src', 'Offroad.cs')));
-app.get('/cs-code/race_car', (req, res) => sendJavaFile(res, path.join(__dirname, 'cs_src', 'RaceCar.cs')));
+app.get('/cs-code/cars', (req, res) => sendCSFile(res, path.join(__dirname, 'cs_src', 'Cars.cs')));
+app.get('/cs-code/delivery_car', (req, res) => sendCSFile(res, path.join(__dirname, 'cs_src', 'DeliveryCar.cs')));
+app.get('/cs-code/off_road', (req, res) => sendCSFile(res, path.join(__dirname, 'cs_src', 'Offroad.cs')));
+app.get('/cs-code/race_car', (req, res) => sendCSFile(res, path.join(__dirname, 'cs_src', 'RaceCar.cs')));
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'main.html')));
 app.get('/csharp', (req, res) => res.sendFile(path.join(__dirname, 'public/cs', 'csharp.html')));

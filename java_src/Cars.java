@@ -1,34 +1,30 @@
 package java_src;
 public class Cars {
-        // Properties of the car
-        private int speed; // km/h
-        private int fuelConsumption; // liters per 100 km
+
+        private int speed; 
+        private int fuelConsumption; 
         private String color;
     
-        // Constructor
         public Cars(int speed, int fuelConsumption, String color) {
             this.speed = speed;
             this.fuelConsumption = fuelConsumption;
             this.color = color;
         }
     
-        // Method to accelerate the car
         public void accelerate(int increase) {
             speed += increase;
             System.out.println("Accelerating... New speed is " + speed + " km/h.");
         }
     
-        // Method to brake the car
         public void brake(int decrease) {
             if (speed - decrease >= 0) {
                 speed -= decrease;
             } else {
-                speed = 0; // Ensure speed doesn't go below 0
+                speed = 0; 
             }
             System.out.println("Braking... New speed is " + speed + " km/h.");
         }
     
-        // Getters
         public int getSpeed() {
             return speed;
         }
@@ -41,7 +37,6 @@ public class Cars {
             return color;
         }
     
-        // Setters
         public void setSpeed(int speed) {
             this.speed = speed;
         }
@@ -54,7 +49,6 @@ public class Cars {
             this.color = color;
         }
     
-        // Display car information
         public void displayInfo() {
             System.out.println("Car Details:");
             System.out.println("Speed: " + speed + " km/h");

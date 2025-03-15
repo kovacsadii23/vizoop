@@ -4,19 +4,17 @@ namespace cs_src
 {
     public class DeliveryCar : Cars
     {
-        // Unique attributes for DeliveryCar
-        private int cargoCapacity; // Maximum capacity in kg
-        private int currentLoad; // Current load in kg
 
-        // Constructor
+        private int cargoCapacity; 
+        private int currentLoad; 
+
         public DeliveryCar(int speed, int fuelConsumption, string color, int cargoCapacity)
             : base(speed, fuelConsumption, color)
         {
             this.cargoCapacity = cargoCapacity;
-            this.currentLoad = 0; // Default to an empty load
+            this.currentLoad = 0; 
         }
 
-        // Method to load cargo
         public void LoadCargo(int weight)
         {
             if (currentLoad + weight <= cargoCapacity)
@@ -30,7 +28,6 @@ namespace cs_src
             }
         }
 
-        // Method to unload cargo
         public void UnloadCargo(int weight)
         {
             if (weight <= currentLoad)
@@ -44,19 +41,16 @@ namespace cs_src
             }
         }
 
-        // Property for cargo capacity
         public int CargoCapacity
         {
             get { return cargoCapacity; }
         }
 
-        // Property for current load
         public int CurrentLoad
         {
             get { return currentLoad; }
         }
 
-        // Override the DisplayInfo method to include DeliveryCar-specific details
         public override void DisplayInfo()
         {
             base.DisplayInfo();

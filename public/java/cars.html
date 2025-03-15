@@ -12,7 +12,6 @@
 
 <pre><code id="codeDisplay">Loading...</code></pre>
 <script>
-    // Fetch the Java code for the "Cars" class
     fetch('/java-code/cars')
         .then(response => {
             if (!response.ok) throw new Error('Java fájl nem található');

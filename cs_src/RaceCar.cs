@@ -4,11 +4,9 @@ namespace cs_src
 {
     public class RaceCar : Cars
     {
-        // Unique attributes for RaceCar
-        private double aerodynamics; // Efficiency coefficient
+        private double aerodynamics; 
         private bool boostEnabled;
 
-        // Constructor
         public RaceCar(int speed, int fuelConsumption, string color, double aerodynamics, bool boostEnabled)
             : base(speed, fuelConsumption, color)
         {
@@ -16,13 +14,12 @@ namespace cs_src
             this.boostEnabled = boostEnabled;
         }
 
-        // Method to enable boost mode
         public void EnableBoost()
         {
             if (boostEnabled)
             {
                 int boostAmount = 50;
-                Speed += boostAmount; // Using the Speed property for setter
+                Speed += boostAmount;
                 Console.WriteLine("Boost mode activated! Speed increased by " + boostAmount + " km/h.");
             }
             else
@@ -31,15 +28,13 @@ namespace cs_src
             }
         }
 
-        // Method specific to handling performance
         public void OptimizePerformance()
         {
             Console.WriteLine("Optimizing performance with aerodynamics coefficient of " + aerodynamics + ".");
-            // Simulate performance optimization
             if (aerodynamics > 1.5)
             {
                 Console.WriteLine("High aerodynamics, top speed increased.");
-                Speed += 10; // Using the Speed property for setter
+                Speed += 10; 
             }
             else
             {
@@ -47,14 +42,12 @@ namespace cs_src
             }
         }
 
-        // Property for aerodynamics
         public double Aerodynamics
         {
             get { return aerodynamics; }
             set { aerodynamics = value; }
         }
 
-        // Override the DisplayInfo method to include RaceCar-specific details
         public override void DisplayInfo()
         {
             base.DisplayInfo();

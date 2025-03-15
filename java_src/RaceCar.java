@@ -1,7 +1,6 @@
 package java_src;
 public class RaceCar extends Cars {
-    // Unique attributes for RaceCar
-    private double aerodynamics; // Efficiency coefficient
+    private double aerodynamics; 
     private boolean boostEnabled;
 
     // Constructor
@@ -11,7 +10,6 @@ public class RaceCar extends Cars {
         this.boostEnabled = boostEnabled;
     }
 
-    // Method to enable boost mode
     public void enableBoost() {
         if (boostEnabled) {
             int boostAmount = 50;
@@ -22,10 +20,8 @@ public class RaceCar extends Cars {
         }
     }
 
-    // Method specific to handling performance
     public void optimizePerformance() {
         System.out.println("Optimizing performance with aerodynamics coefficient of " + aerodynamics + ".");
-        // Simulate performance optimization
         if (aerodynamics > 1.5) {
             System.out.println("High aerodynamics, top speed increased.");
             setSpeed(getSpeed() + 10);
@@ -34,7 +30,6 @@ public class RaceCar extends Cars {
         }
     }
 
-    // Getter and setter for aerodynamics
     public double getAerodynamics() {
         return aerodynamics;
     }
@@ -43,7 +38,6 @@ public class RaceCar extends Cars {
         this.aerodynamics = aerodynamics;
     }
 
-    // Override the displayInfo method to include RaceCar-specific details
     @Override
     public void displayInfo() {
         super.displayInfo();

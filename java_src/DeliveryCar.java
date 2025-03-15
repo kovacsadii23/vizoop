@@ -1,17 +1,14 @@
 package java_src;
 public class DeliveryCar extends Cars {
-    // Unique attributes for DeliveryCar
-    private int cargoCapacity; // Maximum capacity in kg
-    private int currentLoad; // Current load in kg
+    private int cargoCapacity; 
+    private int currentLoad; 
 
-    // Constructor
     public DeliveryCar(int speed, int fuelConsumption, String color, int cargoCapacity) {
         super(speed, fuelConsumption, color);
         this.cargoCapacity = cargoCapacity;
-        this.currentLoad = 0; // Default to an empty load
+        this.currentLoad = 0; 
     }
 
-    // Method to load cargo
     public void loadCargo(int weight) {
         if (currentLoad + weight <= cargoCapacity) {
             currentLoad += weight;
@@ -21,7 +18,6 @@ public class DeliveryCar extends Cars {
         }
     }
 
-    // Method to unload cargo
     public void unloadCargo(int weight) {
         if (weight <= currentLoad) {
             currentLoad -= weight;
@@ -31,17 +27,14 @@ public class DeliveryCar extends Cars {
         }
     }
 
-    // Getter for cargo capacity
     public int getCargoCapacity() {
         return cargoCapacity;
     }
 
-    // Getter for current load
     public int getCurrentLoad() {
         return currentLoad;
     }
 
-    // Override the displayInfo method to include DeliveryCar-specific details
     @Override
     public void displayInfo() {
         super.displayInfo();

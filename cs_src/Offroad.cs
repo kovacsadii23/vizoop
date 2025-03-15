@@ -7,7 +7,6 @@ namespace cs_src
         private int groundClearance;
         private bool fourWheelDrive;
 
-        // Constructor
         public OffRoad(int speed, int fuelConsumption, string color, int groundClearance, bool fourWheelDrive)
             : base(speed, fuelConsumption, color)
         {
@@ -15,7 +14,6 @@ namespace cs_src
             this.fourWheelDrive = fourWheelDrive;
         }
 
-        // Method to activate four-wheel drive
         public void ActivateFourWheelDrive()
         {
             if (fourWheelDrive)
@@ -28,7 +26,6 @@ namespace cs_src
             }
         }
 
-        // Method to adapt to different terrain types
         public void AdaptToTerrain(string terrainType)
         {
             Console.WriteLine("Adapting to " + terrainType + " terrain...");
@@ -46,14 +43,12 @@ namespace cs_src
             }
         }
 
-        // Property for ground clearance
         public int GroundClearance
         {
             get { return groundClearance; }
             set { groundClearance = value; }
         }
 
-        // Override the DisplayInfo method to include OffRoad-specific details
         public override void DisplayInfo()
         {
             base.DisplayInfo();
