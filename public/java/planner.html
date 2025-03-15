@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tervező</title>
+    <link rel="stylesheet" href="/style/javastyle.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/konva/8.3.5/konva.min.js"></script>
+    <style>
+        .container { margin-top: 20px; margin-left:10px; display: flex; }
+        #menu { position: absolute; left: 10px; top: 60px; display: none; background: white; padding: 5px; border: 1px solid #ccc; }
+        .menu-item { padding: 5px; cursor: pointer; border-bottom: 1px solid #ddd; }
+        .menu-item:last-child { border-bottom: none; }
+        #canvas-container { flex: 1; border: 1px solid #000; height: calc(600px); margin-left: 0; width: 1400px;}
+        #addBtn, #connectBtn, #saveBtn, #loadBtn {padding: 8px 12px; margin-bottom: 2px; margin-right: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 60px;}
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Projekt Tervező</h1>
+    </header>
+    
+    <nav>
+        <a href="java.html" class="home-icon-button"><img src="/assets/home.png" alt="Kezdőlap" title="Kezdőlap" width="24" height="24"></a>
+        <a href="objects.html">Objektum</a>
+        <a href="class.html">Osztály</a>
+        <a href="inheritance.html">Öröklés</a>
+        <a href="abstract.html">Absztrakt osztály</a>
+        <a href="interface.html">Interfész</a>
+        <a href="planner.html">Tervező</a>
+        <a href="../cs/csobjects.html" class="icon-button"><img src="/assets/csharp.png" alt="Java" title="Java" width="24" height="24"></a>
+    </nav>
+    <div id="error-message"></div>
+    <div class="container">
+        <div id="sidebar">
+            <button id="addBtn">+</button>
+            <button id="connectBtn">Connect</button>
+            <button id="saveBtn">Save</button>
+            <button id="loadBtn">Load</button>
+        </div>
+        <div id="canvas-container"></div>
+    </div>
+    
+    <div id="menu">
+        <div class="menu-item" data-type="class" style="background: lightblue;">Class</div>
+        <div class="menu-item" data-type="abstract" style="background: lightcoral;">Abstract Class</div>
+        <div class="menu-item" data-type="interface" style="background: lightgreen;">Interface</div>
+    </div>
+    
+    <script>
+        const stage = new Konva.Stage({
+            container: 'canvas-container',
+            width: window.innerWidth - 60,
+            height: window.innerHeight - 60,
+        });
+        
+        const layer = new Konva.Layer();
+        stage.add(layer);
+        
+        document.getElementById('addBtn').addEventListener('click', () => {
+            const menu = document.getElementById('menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+        
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function () {
+                const name = prompt('Enter name:');
+                if (name) addElement(this.dataset.type, name);
+                document.getElementById('menu').style.display = 'none';
+            });
+        });
+        
+        let selectedElements = [];
+        let connecting = false;
+        
+        document.getElementById('connectBtn').addEventListener('click', () => {
+            connecting = true;
+            selectedElements = [];
+            alert('Click on the superclass, then the subclass.');
+        });
+        
+        function addElement(type, name) {
+            const colors = { class: 'lightblue', abstract: 'lightcoral', interface: 'lightgreen' };
+            const group = new Konva.Group({
+                x: 100, y: 100, draggable: true,
+                name: name
+            });
+            const box = new Konva.Rect({
+                width: 120, height: 50,
+                fill: colors[type], stroke: 'black', strokeWidth: 2
+            });
+            const text = new Konva.Text({
+                text: name, fontSize: 16, width: 120, align: 'center', verticalAlign: 'middle'
+            });
+            text.y(box.height() / 2 - text.height() / 2);
+            group.add(box, text);
+            layer.add(group);
+            layer.draw();
+
+            group.on('click', () => {
+                if (connecting) {
+                    selectedElements.push(group);
+                    if (selectedElements.length === 2) {
+                        connectElements(selectedElements[0], selectedElements[1]);
+                        selectedElements = [];
+                        connecting = false;
+                    }
+                }
+            });
+
+            group.on('dragmove', () => {
+                updateConnections();
+            });
+        }
+
+        let connections = [];
+
+        function connectElements(parent, child) {
+            const parentType = getElementType(parent);
+            const childType = getElementType(child);
+
+            if (parent === child) {
+                showError("Egy elem nem örökölhet önmagából!");
+                return;
+            }
+
+            if (childType === 'class' || childType === 'abstract') {
+                const hasClassParent = connections.some(conn =>
+                    conn.child === child && (getElementType(conn.parent) === 'class' || getElementType(conn.parent) === 'abstract')
+                );
+
+                if (hasClassParent && (parentType === 'class' || parentType === 'abstract')) {
+                    showError("Egy osztálynak csak egy osztály őse lehet!");
+                    return;
+                }
+            }
+            if (childType === 'interface' && (parentType === 'class' || parentType === 'abstract')) {
+                showError("Egy interfész nem örökölhet osztályból!");
+                return;
+            }
+
+            let dashConfig = parentType === 'interface' ? [10, 5] : []; //szaggatott vonal, ha az ős interface
+
+            const line = new Konva.Arrow({
+                points: getLinePoints(parent, child),
+                pointerLength: 10,
+                pointerWidth: 10,
+                fill: 'black',
+                stroke: 'black',
+                strokeWidth: 2,
+                dash: dashConfig
+            });
+            layer.add(line);
+            connections.push({ parent, child, line });
+            layer.draw();
+        }
+
+        function getElementType(element) {
+            const box = element.findOne('Rect');
+            if (!box) return null;
+
+            if (box.fill() === 'lightblue') return 'class';
+            if (box.fill() === 'lightcoral') return 'abstract';
+            if (box.fill() === 'lightgreen') return 'interface';
+
+            return null;
+        }
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+
+        function getLinePoints(parent, child) {
+            return [
+                parent.x() + 60, parent.y() + 50,
+                child.x() + 60, child.y()
+            ];
+        }
+
+        function updateConnections() {
+            connections.forEach(conn => {
+                conn.line.points(getLinePoints(conn.parent, conn.child));
+            });
+            layer.draw();
+        }
+        
+        document.getElementById('saveBtn').addEventListener('click', () => {
+            const json = stage.toJSON();
+            localStorage.setItem('diagram', json);
+            alert('Diagram saved!');
+        });
+        
+        document.getElementById('loadBtn').addEventListener('click', () => {
+            const json = localStorage.getItem('diagram');
+            if (json) {
+                stage.destroyChildren();
+                stage.add(Konva.Node.create(json, 'canvas-container'));
+                alert('Diagram loaded!');
+            }
+        });
+    </script>
+</body>
+</html>

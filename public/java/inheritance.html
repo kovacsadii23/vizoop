@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Öröklés Vizualizáció</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                fontSize: '16px',
+            }
+        });
+    </script>
+    <link rel="stylesheet" href="/style/javastyle.css">
+</head>
+<body>
+    <header>
+        <h1>Öröklés</h1>
+    </header>
+    <nav>
+        <a href="java.html" class="home-icon-button"><img src="/assets/home.png" alt="Kezdőlap" title="Kezdőlap" width="24" height="24"></a>
+        <a href="objects.html">Objektum</a>
+        <a href="class.html">Osztály</a>
+        <a href="inheritance.html">Öröklés</a>
+        <a href="abstract.html">Absztrakt osztály</a>
+        <a href="interface.html">Interfész</a>
+        <a href="planner.html">Tervező</a>
+        <a href="../cs/csinh.html" class="icon-button"><img src="/assets/csharp.png" alt="Java" title="Java" width="24" height="24"></a>
+    </nav>
+
+    <div class="container">
+        <h2>Hogyan működik az öröklés?</h2>
+        <p>Az objektumorientált programozásban az öröklés lehetővé teszi, hogy egy osztály (alap osztály) attribútumait és metódusait más osztályok is felhasználják (leszármazott osztályok). Az alábbi diagram mutatja, hogyan történik az öröklés a Cars osztály és leszármazottjai között. Kattints egy osztály nevére, hogy megnézd annak forráskódját.</p>
+
+        <!-- Mermaid diagram -->
+        <div class="mermaid">
+            classDiagram
+            class Cars {
+                - int speed
+                - int fuelConsumption
+                - String color
+                + accelerate(int increase)
+                + brake(int decrease)
+                + displayInfo()
+            }
+            class OffRoad {
+                - boolean allWheelDrive
+                + activateAllWheelDrive()
+            }
+            class RaceCar {
+                - int turboBoost
+                + useTurboBoost()
+            }
+            class DeliveryCar {
+                - int cargoCapacity
+                + loadCargo(int weight)
+            }
+
+            Cars --|> OffRoad
+            Cars --|> RaceCar
+            Cars --|> DeliveryCar
+
+            %% Inherited attributes and methods
+            OffRoad : int speed (Örökölt)
+            OffRoad : int fuelConsumption (Örökölt)
+            OffRoad : String color (Örökölt)
+            OffRoad : + accelerate(int increase) (Örökölt)
+            OffRoad : + brake(int decrease) (Örökölt)
+            OffRoad : + displayInfo() (Örökölt)
+
+            RaceCar : int speed (Örökölt)
+            RaceCar : int fuelConsumption (Örökölt)
+            RaceCar : String color (Örökölt)
+            RaceCar : + accelerate(int increase) (Örökölt)
+            RaceCar : + brake(int decrease) (Örökölt)
+            RaceCar : + displayInfo() (Örökölt)
+
+            DeliveryCar : int speed (Örökölt)
+            DeliveryCar : int fuelConsumption (Örökölt)
+            DeliveryCar : String color (Örökölt)
+            DeliveryCar : + accelerate(int increase) (Örökölt)
+            DeliveryCar : + brake(int decrease) (Örökölt)
+            DeliveryCar : + displayInfo() (Örökölt)
+
+            %% Make class names clickable
+            click Cars href "cars.html" "Nézd meg a Cars osztály forráskódját"
+            click OffRoad href "off_road.html" "Nézd meg az OffRoad osztály forráskódját"
+            click RaceCar href "race_car.html" "Nézd meg a RaceCar osztály forráskódját"
+            click DeliveryCar href "delivery_car.html" "Nézd meg a DeliveryCar osztály forráskódját"
+        </div>
+
+    </div>
+
+</body>
+</html>

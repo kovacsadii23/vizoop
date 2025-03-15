@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Osztályok</title>
+    <link rel="stylesheet" href="/style/csstyle.css">
+</head>
+<body>
+
+    <header>
+        <h1>Osztályok</h1>
+    </header>
+
+    <nav>
+        <a href="csharp.html" class="home-icon-button"><img src="/assets/home.png" alt="Kezdőlap" title="Kezdőlap" width="24" height="24"></a>
+        <a href="csobjects.html">Objektum</a>
+        <a href="csclass.html">Osztály</a>
+        <a href="csinh.html">Öröklés</a>
+        <a href="csabstract.html">Absztrakt osztály</a>
+        <a href="csinterface.html">Interfész</a>
+        <a href="csplanner.html">Tervező</a>
+        <a href="../java/class.html" class="icon-button"><img src="/assets/java.png" alt="Java" title="Java" width="24" height="24"></a>
+    </nav>
+    <div class="sidebar">
+        <h3>Mentett Osztályok</h3>
+        <ul id="fileList"></ul>
+    </div>
+    <div class="container">
+        <h2>Hozzon létre egy osztályt!</h2>
+        
+        <div class="input-group">
+            <label for="className">Osztály neve: </label>
+            <input type="text" id="className" placeholder="Pl.: Dog">
+        </div>
+
+        <div class="input-group">
+            <label for="attributeName">Attribútum neve: </label>
+            <input type="text" id="attributeName" placeholder="Pl.: name">
+            <label for="attributeType">Típus: </label>
+            <input type="text" id="attributeType" placeholder="Pl.: string">
+            <button class="button" onclick="addAttribute()">Attribútum hozzáadása</button>
+        </div>
+
+        <div class="input-group">
+            <label for="methodName">Metódus neve: </label>
+            <input type="text" id="methodName" placeholder="Pl.: Bark">
+            <button class="button" onclick="addMethod()">Metódus hozzáadása</button>
+        </div>
+
+        <button class="button" onclick="generateClass()">Osztály létrehozása</button>
+        <button class="button" onclick="saveAsCSFile()">C# fájl mentése</button>
+        <button class="button" onclick="downloadCSFile()">C# fájl letöltése</button>
+        <div class="code-snippet" id="classOutput">
+            <code>// Az osztály itt jelenik meg.</code>
+        </div>
+    </div>
+
+    <script>
+        let attributes = [];
+        let methods = [];
+        let currentFileName = null;
+
+        function addAttribute() {
+            const attributeName = document.getElementById("attributeName").value;
+            const attributeType = document.getElementById("attributeType").value;
+
+            if (attributeName && attributeType) {
+                attributes.push({ name: attributeName, type: attributeType });
+                document.getElementById("attributeName").value = '';
+                document.getElementById("attributeType").value = '';
+                updateClassOutput();
+            }
+        }
+
+        function addMethod() {
+            const methodName = document.getElementById("methodName").value;
+
+            if (methodName) {
+                methods.push(methodName);
+                document.getElementById("methodName").value = '';
+                updateClassOutput();
+            }
+        }
+
+        function generateClass() {
+            const className = document.getElementById("className").value || "UnnamedClass";
+            updateClassOutput(className);
+        }
+
+        function updateClassOutput(className = "UnnamedClass") {
+            let classCode = `public class ${className} {\n`;
+
+            attributes.forEach(attr => {
+                classCode += `    private ${attr.type} ${attr.name};\n`;
+            });
+
+            classCode += `\n    // Konstruktor\n`;
+            classCode += `    public ${className}() {\n        // Konstruktor logika ide kerülhet\n    }\n\n`;
+
+            methods.forEach(method => {
+                classCode += `    public void ${method}() {\n        // ${method} metódus logikája ide kerül\n    }\n`;
+            });
+
+            classCode += `}`;
+
+            document.getElementById("classOutput").innerHTML = `<code>${classCode}</code>`;
+        }
+        function saveAsCSFile() {
+            const className = document.getElementById("className").value || "UnnamedClass";
+            const csCode = document.getElementById("classOutput").innerText;
+
+            fetch('/save-cs', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ fileName: `${className}.cs`, content: csCode })
+            }).then(response => {
+                if (response.ok) {
+                    alert('Fájl sikeresen mentve!');
+                } else {
+                    alert('Hiba történt a fájl mentésekor.');
+                }
+            });
+        }
+        function downloadCSFile() {
+            const className = currentFileName || (document.getElementById("className").value || "UnnamedClass");
+            const csCode = document.getElementById("classOutput").innerText;
+
+            const blob = new Blob([csCode], { type: 'text/plain' });
+
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${className}.cs`; 
+
+            link.click();
+
+            URL.revokeObjectURL(link.href);
+        }
+        function fetchSavedFiles() {
+            fetch('/list-cs-files')
+                .then(response => response.json())
+                .then(files => {
+                    const fileList = document.getElementById('fileList');
+                    fileList.innerHTML = ''; 
+                    files.forEach(file => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = file;
+                        listItem.onclick = () => loadFile(file);
+                        fileList.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error('Error fetching files:', error));
+        }
+        function loadFile(fileName) {
+            fetch(`/get-cs-file?fileName=${encodeURIComponent(fileName)}`)
+                .then(response => response.text())
+                .then(content => {
+                    document.getElementById('classOutput').innerHTML = `<code>${content}</code>`;
+                    currentFileName = fileName.replace('.cs', '');
+                })
+                .catch(error => console.error('Error loading file:', error));
+        }
+
+        window.onload = fetchSavedFiles;
+    </script>
+</body>
+</html>

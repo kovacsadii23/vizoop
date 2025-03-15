@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cars Osztály Forráskód</title>
+    <link rel="stylesheet" href="/style/code.css">
+</head>
+<body>
+
+<h1>Cars Osztály Forráskód</h1>
+
+<pre><code id="codeDisplay">Loading...</code></pre>
+<script>
+    // Fetch the Java code for the "Cars" class
+    fetch('/cs-code/cars')
+        .then(response => {
+            if (!response.ok) throw new Error('CSharp fájl nem található');
+            return response.text();
+        })
+        .then(data => {
+            document.getElementById('codeDisplay').textContent = data;
+        })
+        .catch(error => {
+            document.getElementById('codeDisplay').textContent = error.message;
+        });
+</script>
+
+<a href="csharp.html">Vissza a főoldalra</a>
+
+</body>
+</html>

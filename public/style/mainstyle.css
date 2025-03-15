@@ -1,0 +1,70 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #333; /* Dark background */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  h1 {
+    font-size: 3em;
+    margin-bottom: 40px;
+    color: #f1f1f1;
+  }
+  
+  .options {
+    display: flex;
+    gap: 40px;
+  }
+  
+  .button {
+    width: 200px; /* Size of the button */
+    height: 200px; /* Size of the button */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .button img {
+    max-width: 80%; /* Adjust size of the logo inside the button */
+    max-height: 80%;
+  }
+  
+  .button:hover {
+    transform: scale(1.1); /* Slight zoom effect on hover */
+  }
+  
+  .java {
+    background-color: #ff7200;
+    border-radius: 10px;
+  }
+  
+  .csharp {
+    background-color: #2b8cc4;
+    border-radius: 10px;
+  }
+  
+  .button:hover.java {
+    background-color: #e66e00;
+  }
+  
+  .button:hover.csharp {
+    background-color: #2689b8;
+  }
+  

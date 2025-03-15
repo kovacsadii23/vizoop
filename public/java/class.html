@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Osztályok</title>
+    <link rel="stylesheet" href="/style/javastyle.css">
+</head>
+<body>
+
+    <header>
+        <h1>Osztályok</h1>
+    </header>
+
+    <nav>
+        <a href="java.html" class="home-icon-button"><img src="/assets/home.png" alt="Kezdőlap" title="Kezdőlap" width="24" height="24"></a>
+        <a href="objects.html">Objektum</a>
+        <a href="class.html">Osztály</a>
+        <a href="inheritance.html">Öröklés</a>
+        <a href="abstract.html">Absztrakt osztály</a>
+        <a href="interface.html">Interfész</a>
+        <a href="planner.html">Tervező</a>
+        <a href="../cs/csclass.html" class="icon-button"><img src="/assets/csharp.png" alt="Java" title="Java" width="24" height="24"></a>
+    </nav>
+    <div class="sidebar">
+        <h3>Mentett Osztályok</h3>
+        <ul id="fileList"></ul>
+    </div>
+    <div class="container">
+        <h2>Hozzon létre egy osztályt!</h2>
+        
+        <div class="input-group">
+            <label for="className">Osztály neve: </label>
+            <input type="text" id="className" placeholder="Pl.: Dog">
+        </div>
+
+        <div class="input-group">
+            <label for="attributeName">Attribútum neve: </label>
+            <input type="text" id="attributeName" placeholder="Pl.: name">
+            <label for="attributeType">Típus: </label>
+            <input type="text" id="attributeType" placeholder="Pl.: String">
+            <button class="button" onclick="addAttribute()">Attribútum hozzáadása</button>
+        </div>
+
+        <div class="input-group">
+            <label for="methodName">Metódus neve: </label>
+            <input type="text" id="methodName" placeholder="Pl.: bark">
+            <button class="button" onclick="addMethod()">Metódus hozzáadása</button>
+        </div>
+
+        <button class="button" onclick="generateClass()">Osztály létrehozása</button>
+        <button class="button" onclick="saveAsJavaFile()">Java fájl mentése</button>
+        <button class="button" onclick="downloadJavaFile()">Java fájl letöltése</button>
+        <div class="code-snippet" id="classOutput">
+            <code>// Az osztály itt jelenik meg.</code>
+        </div>
+    </div>
+
+    <script>
+        let attributes = [];
+        let methods = [];
+        let currentFileName = null; 
+
+        function addAttribute() {
+            const attributeName = document.getElementById("attributeName").value;
+            const attributeType = document.getElementById("attributeType").value;
+
+            if (attributeName && attributeType) {
+                attributes.push({ name: attributeName, type: attributeType });
+                document.getElementById("attributeName").value = '';
+                document.getElementById("attributeType").value = '';
+                updateClassOutput();
+            }
+        }
+
+        function addMethod() {
+            const methodName = document.getElementById("methodName").value;
+
+            if (methodName) {
+                methods.push(methodName);
+                document.getElementById("methodName").value = '';
+                updateClassOutput();
+            }
+        }
+
+        function generateClass() {
+            const className = document.getElementById("className").value || "UnnamedClass";
+            updateClassOutput(className);
+        }
+
+        function updateClassOutput(className = "UnnamedClass") {
+            let classCode = `public class ${className} {\n`;
+
+            attributes.forEach(attr => {
+                classCode += `    private ${attr.type} ${attr.name};\n`;
+            });
+
+            classCode += `\n    // Konstruktor\n`;
+            classCode += `    public ${className}() {\n        // Konstruktor logika ide kerülhet\n    }\n\n`;
+
+            // Add methods
+            methods.forEach(method => {
+                classCode += `    public void ${method}() {\n        // ${method} metódus logikája ide kerül\n    }\n`;
+            });
+
+            classCode += `}`;
+
+            document.getElementById("classOutput").innerHTML = `<code>${classCode}</code>`;
+        }
+        function saveAsJavaFile() {
+            const className = document.getElementById("className").value || "UnnamedClass";
+            const javaCode = document.getElementById("classOutput").innerText;
+
+            fetch('/save-java', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ fileName: `${className}.java`, content: javaCode })
+            }).then(response => {
+                if (response.ok) {
+                    alert('Fájl sikeresen mentve!');
+                } else {
+                    alert('Hiba történt a fájl mentésekor.');
+                }
+            });
+        }
+        function downloadJavaFile() {
+            const className = currentFileName || (document.getElementById("className").value || "UnnamedClass");
+            const javaCode = document.getElementById("classOutput").innerText;
+
+            const blob = new Blob([javaCode], { type: 'text/plain' });
+
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${className}.java`; 
+
+            link.click();
+
+            URL.revokeObjectURL(link.href);
+        }
+        function fetchSavedFiles() {
+            fetch('/list-files')
+                .then(response => response.json())
+                .then(files => {
+                    const fileList = document.getElementById('fileList');
+                    fileList.innerHTML = ''; // Clear existing list
+                    files.forEach(file => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = file;
+                        listItem.onclick = () => loadFile(file);
+                        fileList.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error('Error fetching files:', error));
+        }
+
+        // Fetch and display the content of a clicked file
+        function loadFile(fileName) {
+            fetch(`/get-file?fileName=${encodeURIComponent(fileName)}`)
+                .then(response => response.text())
+                .then(content => {
+                    document.getElementById('classOutput').innerHTML = `<code>${content}</code>`;
+                    currentFileName = fileName.replace('.java', ''); // Update the current file name
+                })
+                .catch(error => console.error('Error loading file:', error));
+        }
+
+        // Call fetchSavedFiles when the page loads
+        window.onload = fetchSavedFiles;
+    </script>
+</body>
+</html>

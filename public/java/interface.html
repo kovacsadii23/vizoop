@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interfész</title>
+    <link rel="stylesheet" href="/style/javastyle.css">
+    <style>
+        h2 {
+            text-align: center;
+        }
+        p {
+            text-align: center;
+            padding-left: 2cm;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+        }
+        .method-list {
+            flex: 1;
+            padding: 20px;
+            background: url('/assets/notebook-bg.jpg') no-repeat center center;
+            background-size: cover;
+            border: 1px solid #ccc;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+        }
+        .code-section {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .code-box {
+            background: #1e1e1e;
+            color: #dcdcdc;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+            font-family: monospace;
+            white-space: pre;
+            position: relative;
+        }
+        .highlight {
+            text-decoration: line-through;
+            color: #ff5555;
+        }
+        .code-part {
+            opacity: 0;
+            display: inline-block;
+            white-space: pre;
+        }
+        @keyframes fadeInTyping {
+            from { opacity: 0; width: 0; }
+            to { opacity: 1; width: auto; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Interfész</h1>
+    </header>
+    <nav>
+        <a href="java.html" class="home-icon-button"><img src="/assets/home.png" alt="Kezdőlap" title="Kezdőlap" width="24" height="24"></a>
+        <a href="objects.html">Objektum</a>
+        <a href="class.html">Osztály</a>
+        <a href="inheritance.html">Öröklés</a>
+        <a href="abstract.html">Absztrakt osztály</a>
+        <a href="interface.html">Interfész</a>
+        <a href="planner.html">Tervező</a>
+        <a href="../cs/csinterface.html" class="icon-button">
+            <img src="/assets/csharp.png" alt="C#" title="C#" width="24" height="24">
+        </a>
+    </nav>
+    <h2>Mi az az interfész?</h2>
+    <p>
+        Az <strong>interfész</strong> egy olyan teljesen absztrakt osztály, amely csak metódusok deklarációit tartalmazza.
+        Az interfészek lehetővé teszik a többszörös öröklődést, mivel egy osztály több interfészt is implementálhat. 
+        Erre az <strong>implements</strong> kulcsszót használjuk.
+        Az interfészben lévő metódusokat az implementáló osztálynak kell megvalósítania.
+    </p>
+    <div class="container">
+        <div class="method-list">
+            <h2>Megvalósítandó metódusok a Auto osztály számára:</h2>
+            <ul>
+                <li id="start-method">void indulas(); - Elindítja a járművet</li>
+                <li id="stop-method">void megallas(); - Megállítja a járművet</li>
+                <li id="speed-method">int getSebesseg(); - Visszaadja az aktuális sebességet</li>
+            </ul>
+        </div>
+        <div class="code-section">
+            <div class="code-box">
+                <h3>Interfész deklaráció</h3>
+                <code>
+public interface Jarmu {
+    void indulas();
+    void megallas();
+    int getSebesseg();
+}
+                </code>
+            </div>
+            <div class="code-box">
+                <h3>Implementáló osztály</h3>
+                <code id="code-container">
+public class Auto implements Jarmu {
+    <span class="code-part" id="start-override">@Override</span>
+    <span class="code-part" id="start-method-code">public void indulas() { sebesseg = 10; }</span>
+
+    <span class="code-part" id="stop-override">@Override</span>
+    <span class="code-part" id="stop-method-code">public void megallas() { sebesseg = 0; }</span>
+
+    <span class="code-part" id="speed-override">@Override</span>
+    <span class="code-part" id="speed-method-code">public int getSebesseg() { return sebesseg; }</span>
+}
+                </code>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function revealMethod(methodId, codeId, listId, delay) {
+            setTimeout(() => {
+                document.getElementById(methodId).style.animation = "fadeInTyping 1.5s forwards";
+                document.getElementById(codeId).style.animation = "fadeInTyping 1.5s forwards";
+                document.getElementById(listId).classList.add("highlight");
+            }, delay);
+        }
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            revealMethod("start-override", "start-method-code", "start-method", 1000);
+            revealMethod("stop-override", "stop-method-code", "stop-method", 4000);
+            revealMethod("speed-override", "speed-method-code", "speed-method", 7000);
+        });
+    </script>
+</body>
+</html>

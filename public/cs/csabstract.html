@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absztrakt Osztály</title>
+    <link rel="stylesheet" href="/style/csstyle.css">
+</head>
+<body>
+
+    <header>
+        <h1>Absztrakt Osztály</h1>
+    </header>
+
+    <nav>
+        <a href="csharp.html" class="home-icon-button"><img src="/assets/home.png" alt="Kezdőlap" title="Kezdőlap" width="24" height="24"></a>
+        <a href="csobjects.html">Objektum</a>
+        <a href="csclass.html">Osztály</a>
+        <a href="csinh.html">Öröklés</a>
+        <a href="csabstract.html">Absztrakt osztály</a>
+        <a href="csinterface.html">Interfész</a>
+        <a href="csplanner.html">Tervező</a>
+        <a href="../java/abstract.html" class="icon-button"><img src="/assets/java.png" alt="C#" title="C#" width="24" height="24"></a>
+    </nav>
+
+    <div class="container">
+        <h2>Mi az absztrakt osztály?</h2>
+        <p>
+            Az <strong>absztrakt osztály</strong> egy olyan osztály, amelyet nem lehet példányosítani.
+            Csak más osztályok számára szolgál alapként (szülőosztályként).
+            Absztrakt osztály tartalmazhat absztrakt metódusokat, amelyek nem rendelkeznek implementációval,
+            és konkrét metódusokat is, amelyeknek van megvalósításuk.
+        </p>
+
+        <div style="display: flex; gap: 20px;">
+            <div style="flex: 1;">
+                <h3>Hibás próbálkozás</h3>
+                <div class="code-snippet">
+                    <pre><code>
+abstract class Forma {
+    public abstract void Rajzol();
+}
+Forma forma = new Forma(); // Ez hibát okoz
+                    </code></pre>
+                </div>
+                <button class="button" onclick="tryInstantiateAbstractClass()">Forma példányosítása</button>
+                <div id="errorOutput" style="margin-top: 20px; color: red; font-weight: bold;"></div>
+            </div>
+
+            <div style="flex: 1;">
+                <h3>Helyes megoldás</h3>
+                <div class="code-snippet">
+                    <pre><code>
+abstract class Forma {
+    public abstract void Rajzol();
+}
+
+class Kor : Forma {
+    public override void Rajzol() {
+        Console.WriteLine("Egy kört rajzolok.");
+    }
+}
+
+Forma forma = new Kor();
+forma.Rajzol(); // Ez helyesen működik
+                    </code></pre>
+                </div>
+                <button class="button" onclick="tryCorrectInstantiation()">Kör példányosítása és rajzolás</button>
+                <div id="successOutput" style="margin-top: 20px; color: green; font-weight: bold;"></div>
+                <canvas id="circleCanvas" width="200" height="200" style="border:1px solid #000; margin-top: 20px;"></canvas>
+            </div>
+        </div>
+
+        <script>
+            function tryInstantiateAbstractClass() {
+                try {
+                    // Szimuláljuk az absztrakt osztály példányosítását
+                    eval(`
+abstract class Forma {
+    public abstract void Rajzol();
+}
+Forma forma = new Forma();
+                    `);
+                } catch (error) {
+                    document.getElementById('errorOutput').innerText =
+                        "Hiba: Absztrakt osztály nem példányosítható! \nMagyarázat: Az absztrakt osztály csak alapként szolgálhat, önálló objektum nem hozható létre belőle.";
+                }
+            }
+
+            function tryCorrectInstantiation() {
+                try {
+                    // Szimuláljuk a helyes példányosítást
+                    class Forma {
+                        Rajzol() {
+                            throw new Error("Absztrakt metódus. Implementálni kell a leszármazott osztályban.");
+                        }
+                    }
+
+                    class Kor extends Forma {
+                        Rajzol() {
+                            console.log("Egy kört rajzolok.");
+                            const canvas = document.getElementById('circleCanvas');
+                            const ctx = canvas.getContext('2d');
+                            ctx.beginPath();
+                            ctx.arc(100, 100, 50, 0, 2 * Math.PI);
+                            ctx.stroke();
+                        }
+                    }
+
+                    const forma = new Kor();
+                    forma.Rajzol();
+                    document.getElementById('successOutput').innerText =
+                        "Siker: Egy kört rajzolok.";
+                } catch (error) {
+                    document.getElementById('successOutput').innerText =
+                        `Hiba: ${error.message}`;
+                }
+            }
+        </script>
+    </div>
+
+</body>
+</html>

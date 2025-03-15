@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Objektumok</title>
+    <link rel="stylesheet" href="/style/csstyle.css">
+</head>
+<body>
+    <header>
+        <h1>Objektumok</h1>
+    </header>
+
+    <nav>
+        <a href="csharp.html" class="home-icon-button"><img src="/assets/home.png" alt="Kezdőlap" title="Kezdőlap" width="24" height="24"></a>
+        <a href="csobjects.html">Objektum</a>
+        <a href="csclass.html">Osztály</a>
+        <a href="csinh.html">Öröklés</a>
+        <a href="csabstract.html">Absztrakt osztály</a>
+        <a href="csinterface.html">Interfész</a>
+        <a href="csplanner.html">Tervező</a>
+        <a href="../java/objects.html" class="icon-button"><img src="/assets/java.png" alt="Java" title="Java" width="24" height="24"></a>
+    </nav>
+    <div class="container">
+        <h2>Mi az az objektum?</h2>
+        <p>Az objektumok az osztályok példányai, amelyek rendelkeznek az osztály attribútumaival és metódusaival. Az alábbiakban létrehozhatsz egy kutya objektumot a Dog osztály alapján.</p>
+
+        <div>
+            <h3>Új kutya objektum létrehozása</h3>
+            <label for="name">Név:</label>
+            <input type="text" id="name" placeholder="Pl. Buddy" oninput="updateCodeSnippet()">
+            <label for="age">Életkor:</label>
+            <input type="number" id="age" placeholder="Pl. 3" oninput="updateCodeSnippet()">
+            <button onclick="createDog()">Kutya létrehozása</button>
+        </div>
+
+        <div class="code-snippet">
+            <strong>Kód részlet:</strong>
+            <pre id="codeSnippet">
+Dog myDog = new Dog("Buddy", 3);
+            </pre>
+        </div>
+
+        <div class="object-view-container" style="display: none;" id="objectContainer">
+            <div id="dogContainer" class="tooltip">
+                <img src="/assets/dog.png" alt="Dog" id="dogImage">
+                <span class="tooltiptext" id="tooltipText"></span>
+            </div>
+            <div id="objectDisplay" class="object-view">
+                <h3>Kutya objektum</h3>
+                <div class="attributes">
+                    <p><strong>Név:</strong> <span id="displayName"></span></p>
+                    <p><strong>Életkor:</strong> <span id="displayAge"></span> év</p>
+                </div>
+                <div class="methods">
+                    <h4>Módszerek</h4>
+                    <button class="method-button" onclick="bark()">Ugass!</button>
+                    <button class="method-button" onclick="eat()">Egyél!</button>
+                </div>
+            <div id="output" style="margin-top: 10px;"></div>
+        </div>
+    </div>
+
+    <script>
+        
+        class Dog {
+            constructor(name, age) {
+                this.name = name;
+                this.age = age;
+            }
+
+            bark() {
+                return `${this.name} ugat: Woof! Woof!`;
+            }
+
+            eat() {
+                return `${this.name} eszik: Nom nom nom...`;
+            }
+        }
+
+        let dogObject = null;
+
+        function createDog() {
+            const name = document.getElementById("name").value;
+            const age = parseInt(document.getElementById("age").value);
+            
+            dogObject = new Dog(name, age);
+            updateDisplay();
+            document.getElementById("objectContainer").style.display = "flex";
+            showDogImage(name, age);
+        }
+        function updateDisplay() {
+            if (dogObject) {
+                document.getElementById("displayName").innerText = dogObject.name;
+                document.getElementById("displayAge").innerText = dogObject.age;
+            }
+        }
+
+        function bark() {
+            if (dogObject) {
+                document.getElementById("output").innerText = dogObject.bark();
+            }
+        }
+
+        function eat() {
+            if (dogObject) {
+                document.getElementById("output").innerText = dogObject.eat();
+            }
+        }
+
+        function updateCodeSnippet() {
+            const name = document.getElementById("name").value || "Buddy";
+            const age = document.getElementById("age").value || "3";
+            const codeSnippet = `Dog myDog = new Dog("${name}", ${age});`;
+            document.getElementById("codeSnippet").innerText = codeSnippet;
+        }
+        function showDogImage(name, age) {
+            const tooltipText = document.getElementById("tooltipText");
+            tooltipText.innerText = `Class: Dog\nObject: myDog\nNév: ${name}\nKor: ${age}`;
+        }
+    </script>
+
+</body>
+</html>
