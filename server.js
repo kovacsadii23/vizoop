@@ -7,26 +7,9 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-function getLocalIp() {
-    const interfaces = os.networkInterfaces();
-    
-    for (const [name, iface] of Object.entries(interfaces)) {
-        for (const config of iface) {
-            if (config.family === 'IPv4' && !config.internal) {
-                // Skip Hamachi (25.x.x.x)
-                if (config.address.startsWith('25.')) continue;
-                // Skip ZeroTier 
-                if (name.startsWith('zt') || name.toLowerCase().includes('zerotier')) continue;
-                return config.address;
-            }
-        }
-    }
-    return '127.0.0.1';
-}
-const LOCAL_IP = getLocalIp();
-const PORT = 3000;
-app.listen(PORT, LOCAL_IP,() => {
-   console.log(`Server is running on http://${LOCAL_IP}:${PORT}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
 
 function sendJavaFile(res, filePath) {
