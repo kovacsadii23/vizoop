@@ -144,7 +144,7 @@
                 .then(response => response.json())
                 .then(files => {
                     const fileList = document.getElementById('fileList');
-                    fileList.innerHTML = ''; // Clear existing list
+                    fileList.innerHTML = ''; 
                     files.forEach(file => {
                         const listItem = document.createElement('li');
                         listItem.textContent = file;
@@ -155,18 +155,16 @@
                 .catch(error => console.error('Error fetching files:', error));
         }
 
-        // Fetch and display the content of a clicked file
         function loadFile(fileName) {
             fetch(`/get-file?fileName=${encodeURIComponent(fileName)}`)
                 .then(response => response.text())
                 .then(content => {
                     document.getElementById('classOutput').innerHTML = `<code>${content}</code>`;
-                    currentFileName = fileName.replace('.java', ''); // Update the current file name
+                    currentFileName = fileName.replace('.java', ''); 
                 })
                 .catch(error => console.error('Error loading file:', error));
         }
 
-        // Call fetchSavedFiles when the page loads
         window.onload = fetchSavedFiles;
     </script>
 </body>
