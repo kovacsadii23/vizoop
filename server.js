@@ -21,7 +21,6 @@ mongoose.connect('mongodb+srv://<kovacs23adii>:<KovAdrAdmin23>@vizoop.mongodb.ne
 }).then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Could not connect to MongoDB', err));
 
-// Define a schema for Java files
 const JavaFileSchema = new mongoose.Schema({
     fileName: String,
     content: String
