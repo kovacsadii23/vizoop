@@ -22,6 +22,7 @@ const classSchema = new mongoose.Schema({
     content: String
 });
 const ClassFile = mongoose.model('ClassFile', classSchema);
+const csClassFile = mongoose.model('csClassFile', classSchema);
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -54,36 +55,42 @@ app.post('/save-java', async (req, res) => {
     const { fileName, content } = req.body;
     
     try {
-      // Check if the file already exists
-      const existingFile = await ClassFile.findOne({ fileName });
-  
-      if (existingFile) {
-        existingFile.content = content; // Update the content
-        await existingFile.save();
-      } else {
-        const newClassFile = new ClassFile({ fileName, content });
-        await newClassFile.save();
-      }
-  
-      res.status(200).send('Fájl sikeresen mentve!');
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Hiba történt a fájl mentésekor.');
-    }
+        const existingFile = await ClassFile.findOne({ fileName });
+    
+        if (existingFile) {
+            existingFile.content = content; 
+            await existingFile.save();
+        } else {
+            const newClassFile = new ClassFile({ fileName, content });
+            await newClassFile.save();
+        }
+    
+        res.status(200).send('Fájl sikeresen mentve!');
+        } catch (error) {
+        console.error(error);
+        res.status(500).send('Hiba történt a fájl mentésekor.');
+        }
   });
 
-app.post('/save-cs', (req, res) => {
+app.post('/save-cs', async (req, res) => {
     const { fileName, content } = req.body;
-    const filePath = path.join(__dirname, 'saved_cs_classes', fileName);
 
-    fs.writeFile(filePath, content, (err) => {
-        if (err) {
-            console.error('Error saving file:', err);
-            res.status(500).send('Error saving file');
-        } else {
-            res.status(200).send('File saved successfully');
+    try {
+        const existingFile = await csClassFile.findOne({ fileName });
+        
+            if (existingFile) {
+            existingFile.content = content; 
+            await existingFile.save();
+            } else {
+            const newcsClassFile = new csClassFile({ fileName, content });
+            await newcsClassFile.save();
+            }
+        
+            res.status(200).send('Fájl sikeresen mentve!');
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Hiba történt a fájl mentésekor.');
         }
-    });
 });
 
 app.get('/list-files', async (req, res) => {
@@ -95,22 +102,16 @@ app.get('/list-files', async (req, res) => {
       res.status(500).send('Hiba történt a fájlok lekérésekor.');
     }
   });
-app.get('/list-cs-files', (req, res) => {
-    const directory = path.join(__dirname, 'saved_cs_classes');
-
-    if (!fs.existsSync(directory)) {
-        fs.mkdirSync(directory, { recursive: true });
-    }
-
-    fs.readdir(directory, (err, files) => {
-        if (err) {
-            console.error('Error reading directory:', err);
-            res.status(500).send('Error reading directory');
-        } else {
-            res.status(200).json(files);
-        }
-    });
+app.get('/list-cs-files', async (req, res) => {
+    try {
+        const files = await csClassFile.find().select('fileName -_id');
+        res.json(files.map(file => file.fileName));
+      } catch (error) {
+        console.error(error);
+        res.status(500).send('Hiba történt a fájlok lekérésekor.');
+      }
 });
+
 
 app.get('/get-file', async (req, res) => {
     const { fileName } = req.query;
@@ -127,18 +128,20 @@ app.get('/get-file', async (req, res) => {
       res.status(500).send('Hiba történt a fájl betöltésekor.');
     }
   });
-app.get('/get-cs-file', (req, res) => {
+app.get('/get-cs-file', async (req, res) => {
     const { fileName } = req.query;
-    const filePath = path.join(__dirname, 'saved_cs_classes', fileName);
-
-    fs.readFile(filePath, 'utf8', (err, data) => {
-        if (err) {
-            console.error('Error reading file:', err);
-            res.status(500).send('Error reading file');
-        } else {
-            res.status(200).send(data);
-        }
-    });
+  
+    try {
+      const file = await csClassFile.findOne({ fileName });
+      if (file) {
+        res.send(file.content);
+      } else {
+        res.status(404).send('Fájl nem található.');
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Hiba történt a fájl betöltésekor.');
+    }
 });
 
 app.get('/java-code/cars', (req, res) => sendJavaFile(res, path.join(__dirname, 'java_src', 'Cars.java')));
