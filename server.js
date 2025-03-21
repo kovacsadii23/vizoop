@@ -8,6 +8,14 @@ const cors = require('cors');
 require('dotenv').config(); 
 
 const mongoURI = process.env.MONGO_URI;
+if (!mongoURI) {
+    console.error("❌ MONGO_URI is undefined. Check your environment variables.");
+    process.exit(1);
+}
+mongoose.connect(mongoURI)
+    .then(() => console.log("✅ Connected to MongoDB Atlas"))
+    .catch(err => console.error("❌ MongoDB connection error:", err));
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
@@ -16,26 +24,6 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
-
-if (!mongoURI) {
-    console.error("❌ MONGO_URI is undefined. Check your environment variables.");
-    process.exit(1);
-}
-
-mongoose.connect(mongoURI, { 
-    useNewUrlParser: true, 
-    useUnifiedTopology: true 
-})
-.then(() => console.log("✅ Connected to MongoDB Atlas"))
-.catch(err => console.error("❌ MongoDB connection error:", err));
-
-
-const JavaFileSchema = new mongoose.Schema({
-    fileName: String,
-    content: String
-});
-
-const JavaFile = mongoose.model('JavaFile', JavaFileSchema);
 
 function sendJavaFile(res, filePath) {
     fs.readFile(filePath, 'utf8', (err, data) => {
