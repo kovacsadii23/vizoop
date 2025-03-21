@@ -111,12 +111,12 @@ Dog myDog = new Dog("Buddy", 3);
         function updateCodeSnippet() {
             const name = document.getElementById("name").value || "Buddy";
             const age = document.getElementById("age").value || "3";
-            const codeSnippet = `Dog myDog = new Dog("${name}", ${age});`;
+            const codeSnippet = `Dog kutya = new Dog("${name}", ${age});`;
             document.getElementById("codeSnippet").innerText = codeSnippet;
         }
         function showDogImage(name, age) {
             const tooltipText = document.getElementById("tooltipText");
-            tooltipText.innerText = `Class: Dog\nObject: myDog\nNév: ${name}\nKor: ${age}`;
+            tooltipText.innerText = `Class: Dog\nObject: kutya\nNév: ${name}\nKor: ${age}`;
         }
     </script>
 
