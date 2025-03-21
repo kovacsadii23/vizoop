@@ -155,6 +155,7 @@
                 .catch(error => console.error('Error fetching files:', error));
         }
 
+
         function loadFile(fileName) {
             fetch(`/get-file?fileName=${encodeURIComponent(fileName)}`)
                 .then(response => response.text())

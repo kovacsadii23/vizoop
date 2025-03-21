@@ -5,9 +5,10 @@ const path = require('path');
 const app = express();
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config(); 
-
+require('dotenv').config();
+const bodyParser = require('body-parser'); 
 const mongoURI = process.env.MONGO_URI;
+
 if (!mongoURI) {
     console.error("❌ MONGO_URI is undefined. Check your environment variables.");
     process.exit(1);
@@ -16,7 +17,12 @@ mongoose.connect(mongoURI)
     .then(() => console.log("✅ Connected to MongoDB Atlas"))
     .catch(err => console.error("❌ MongoDB connection error:", err));
 
+const classSchema = new mongoose.Schema({
+    fileName: String,
+    content: String
+});
 app.use(express.json());
+app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
@@ -43,19 +49,27 @@ function sendCSFile(res, filePath) {
         }
     });
 }
-app.post('/save-java', (req, res) => {
+app.post('/save-java', async (req, res) => {
     const { fileName, content } = req.body;
-    const filePath = path.join(__dirname, 'saved_classes', fileName);
-
-    fs.writeFile(filePath, content, (err) => {
-        if (err) {
-            console.error('Error saving file:', err);
-            res.status(500).send('Error saving file');
-        } else {
-            res.status(200).send('File saved successfully');
-        }
-    });
-});
+    
+    try {
+      // Check if the file already exists
+      const existingFile = await ClassFile.findOne({ fileName });
+  
+      if (existingFile) {
+        existingFile.content = content; // Update the content
+        await existingFile.save();
+      } else {
+        const newClassFile = new ClassFile({ fileName, content });
+        await newClassFile.save();
+      }
+  
+      res.status(200).send('Fájl sikeresen mentve!');
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Hiba történt a fájl mentésekor.');
+    }
+  });
 
 app.post('/save-cs', (req, res) => {
     const { fileName, content } = req.body;
@@ -71,22 +85,15 @@ app.post('/save-cs', (req, res) => {
     });
 });
 
-app.get('/list-files', (req, res) => {
-    const directory = path.join(__dirname, 'saved_classes');
-
-    if (!fs.existsSync(directory)) {
-        fs.mkdirSync(directory, { recursive: true });
+app.get('/list-files', async (req, res) => {
+    try {
+      const files = await ClassFile.find().select('fileName -_id');
+      res.json(files.map(file => file.fileName));
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Hiba történt a fájlok lekérésekor.');
     }
-
-    fs.readdir(directory, (err, files) => {
-        if (err) {
-            console.error('Error reading directory:', err);
-            res.status(500).send('Error reading directory');
-        } else {
-            res.status(200).json(files);
-        }
-    });
-});
+  });
 app.get('/list-cs-files', (req, res) => {
     const directory = path.join(__dirname, 'saved_cs_classes');
 
@@ -104,19 +111,21 @@ app.get('/list-cs-files', (req, res) => {
     });
 });
 
-app.get('/get-file', (req, res) => {
+app.get('/get-file', async (req, res) => {
     const { fileName } = req.query;
-    const filePath = path.join(__dirname, 'saved_classes', fileName);
-
-    fs.readFile(filePath, 'utf8', (err, data) => {
-        if (err) {
-            console.error('Error reading file:', err);
-            res.status(500).send('Error reading file');
-        } else {
-            res.status(200).send(data);
-        }
-    });
-});
+  
+    try {
+      const file = await ClassFile.findOne({ fileName });
+      if (file) {
+        res.send(file.content);
+      } else {
+        res.status(404).send('Fájl nem található.');
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Hiba történt a fájl betöltésekor.');
+    }
+  });
 app.get('/get-cs-file', (req, res) => {
     const { fileName } = req.query;
     const filePath = path.join(__dirname, 'saved_cs_classes', fileName);
