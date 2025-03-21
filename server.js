@@ -21,6 +21,7 @@ const classSchema = new mongoose.Schema({
     fileName: String,
     content: String
 });
+const ClassFile = mongoose.model('ClassFile', classSchema);
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
