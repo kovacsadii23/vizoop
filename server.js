@@ -21,6 +21,11 @@ const classSchema = new mongoose.Schema({
     fileName: String,
     content: String
 });
+const diagramSchema = new mongoose.Schema({
+  projectName: { type: String, required: true, unique: true },
+  diagramData: { type: String, required: true }
+});
+const Diagram = mongoose.model('Diagram', diagramSchema);
 const ClassFile = mongoose.model('ClassFile', classSchema);
 const csClassFile = mongoose.model('csClassFile', classSchema);
 app.use(express.json());
@@ -142,6 +147,35 @@ app.get('/get-cs-file', async (req, res) => {
       console.error(error);
       res.status(500).send('Hiba történt a fájl betöltésekor.');
     }
+});
+app.post('/save-diagram', async (req, res) => {
+  const { projectName, diagramData } = req.body;
+  if (!projectName || !diagramData) return res.status(400).send("❌ projectName and diagramData are required.");
+
+  try {
+      const diagram = await Diagram.findOneAndUpdate(
+          { projectName },
+          { diagramData },
+          { upsert: true, new: true }
+      );
+      res.status(200).send(`✅ Diagram '${projectName}' saved successfully.`);
+  } catch (error) {
+      console.error(error);
+      res.status(500).send("❌ Error saving diagram.");
+  }
+});
+app.get('/load-diagram', async (req, res) => {
+  const { projectName } = req.query;
+  if (!projectName) return res.status(400).send("❌ projectName is required.");
+
+  try {
+      const diagram = await Diagram.findOne({ projectName });
+      if (diagram) res.json(JSON.parse(diagram.diagramData));
+      else res.status(404).send("❌ Diagram not found.");
+  } catch (error) {
+      console.error(error);
+      res.status(500).send("❌ Error loading diagram.");
+  }
 });
 
 app.get('/java-code/cars', (req, res) => sendJavaFile(res, path.join(__dirname, 'java_src', 'Cars.java')));

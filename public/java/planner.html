@@ -56,6 +56,9 @@
         
         const layer = new Konva.Layer();
         stage.add(layer);
+
+        document.getElementById('saveBtn').addEventListener('click', saveDiagramToDB);
+        document.getElementById('loadBtn').addEventListener('click', loadDiagramFromDB);
         
         document.getElementById('addBtn').addEventListener('click', () => {
             const menu = document.getElementById('menu');
@@ -139,7 +142,7 @@
                 return;
             }
 
-            let dashConfig = parentType === 'interface' ? [10, 5] : []; //szaggatott vonal, ha az ős interface
+            let dashConfig = parentType === 'interface' ? [10, 5] : []; 
 
             const line = new Konva.Arrow({
                 points: getLinePoints(parent, child),
@@ -190,20 +193,47 @@
             layer.draw();
         }
         
-        document.getElementById('saveBtn').addEventListener('click', () => {
-            const json = stage.toJSON();
-            localStorage.setItem('diagram', json);
-            alert('Diagram saved!');
-        });
-        
-        document.getElementById('loadBtn').addEventListener('click', () => {
-            const json = localStorage.getItem('diagram');
-            if (json) {
-                stage.destroyChildren();
-                stage.add(Konva.Node.create(json, 'canvas-container'));
-                alert('Diagram loaded!');
+        async function saveDiagramToDB() {
+            const projectName = prompt("Enter project name:");
+            if (!projectName) return;
+
+            const json = stage.toJSON(); // Convert stage to JSON
+
+            try {
+                const response = await fetch('/save-diagram', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ projectName, diagramData: json })
+                });
+
+                const message = await response.text();
+                alert(message);
+            } catch (error) {
+                console.error("❌ Error saving diagram:", error);
             }
-        });
+        }
+
+        async function loadDiagramFromDB() {
+            const projectName = prompt("Enter project name to load:");
+            if (!projectName) return;
+
+            try {
+                const response = await fetch(`/load-diagram?projectName=${encodeURIComponent(projectName)}`);
+
+                if (!response.ok) {
+                    alert("❌ Diagram not found.");
+                    return;
+                }
+
+                const json = await response.json();
+
+                stage.destroyChildren(); // Clear existing diagram
+                stage.add(Konva.Node.create(json, 'canvas-container')); // Load from JSON
+                alert("✅ Diagram loaded!");
+            } catch (error) {
+                console.error("❌ Error loading diagram:", error);
+            }
+        }
     </script>
 </body>
 </html>
