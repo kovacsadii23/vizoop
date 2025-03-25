@@ -212,40 +212,51 @@
                 console.error("❌ Error saving diagram:", error);
             }
         }
-        
+
         async function loadDiagramFromDB() {
             const projectName = prompt("Enter project name to load:");
             if (!projectName) return;
 
             try {
                 const response = await fetch(`/load-diagram?projectName=${encodeURIComponent(projectName)}`);
-
                 if (!response.ok) {
                     alert("❌ Diagram not found.");
                     return;
                 }
 
                 const json = await response.json();
-                const parsedDiagram = JSON.parse(json.diagramData); // Parse diagram data
+                const parsedDiagram = JSON.parse(json.diagramData); // Parse stored JSON
 
-                stage.destroyChildren(); // Clear existing diagram
+                stage.destroyChildren(); // Clear old elements
                 const newLayer = new Konva.Layer(); // Create a new layer
+                stage.add(newLayer);
 
-                parsedDiagram.children.forEach(nodeData => {
-                    const node = Konva.Node.create(nodeData);
-                    newLayer.add(node);
+                parsedDiagram.forEach(nodeData => {
+                    let node;
+                    if (nodeData.className === "Rect") {
+                        node = new Konva.Rect(nodeData.attrs);
+                    } else if (nodeData.className === "Text") {
+                        node = new Konva.Text(nodeData.attrs);
+                    } else if (nodeData.className === "Line") {
+                        node = new Konva.Line(nodeData.attrs);
+                    }
 
-                    // Reattach dragging events (to fix movement issue)
-                    node.draggable(true);
-                    node.on('dragmove', () => updateConnections(node));
+                    if (node) {
+                        newLayer.add(node);
+                        node.draggable(true);
+
+                        // Reattach events to ensure connections remain
+                        node.on("dragmove", () => updateConnections(node));
+                    }
                 });
 
-                stage.add(newLayer);
+                stage.draw(); // Ensure everything is visible
                 alert("✅ Diagram loaded!");
             } catch (error) {
                 console.error("❌ Error loading diagram:", error);
             }
         }
+
     </script>
 </body>
 </html>
