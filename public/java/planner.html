@@ -233,8 +233,30 @@
             } catch (error) {
                 console.error("❌ Error loading diagram:", error);
             }
+            node.on("dragmove", () => updateConnections(node));
         }
+        function updateConnections(node) {
+            const nodeId = node.id();
+            
+            // Find all lines connected to this node
+            stage.find('Line').forEach(line => {
+                if (line.attrs.startNodeId === nodeId || line.attrs.endNodeId === nodeId) {
+                    const startNode = stage.findOne(`#${line.attrs.startNodeId}`);
+                    const endNode = stage.findOne(`#${line.attrs.endNodeId}`);
+                    
+                    if (startNode && endNode) {
+                        line.points([
+                            startNode.x() + startNode.width() / 2, 
+                            startNode.y() + startNode.height() / 2,
+                            endNode.x() + endNode.width() / 2, 
+                            endNode.y() + endNode.height() / 2
+                        ]);
+                    }
+                }
+            });
 
+            stage.batchDraw();
+        }
     </script>
 </body>
 </html>
