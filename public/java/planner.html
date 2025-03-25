@@ -227,12 +227,16 @@
                 const json = await response.json();
                 const parsedDiagram = JSON.parse(json.diagramData); // Parse stored JSON
 
-                stage.destroyChildren(); // Clear old elements
-                const newLayer = new Konva.Layer(); // Create a new layer
+                // Clear old elements
+                stage.destroyChildren();
+                const newLayer = new Konva.Layer();
                 stage.add(newLayer);
+
+                let elements = {}; // Store elements by ID for reconnecting lines
 
                 parsedDiagram.forEach(nodeData => {
                     let node;
+
                     if (nodeData.className === "Rect") {
                         node = new Konva.Rect(nodeData.attrs);
                     } else if (nodeData.className === "Text") {
@@ -242,11 +246,33 @@
                     }
 
                     if (node) {
+                        node.id(nodeData.attrs.id); // Set unique ID
                         newLayer.add(node);
+                        elements[node.id()] = node; // Store for reconnecting lines
                         node.draggable(true);
 
-                        // Reattach events to ensure connections remain
+                        // Reattach drag event listeners
                         node.on("dragmove", () => updateConnections(node));
+                    }
+                });
+
+                // Ensure lines connect correctly
+                newLayer.getChildren().forEach(node => {
+                    if (node.className === "Line") {
+                        const points = node.attrs.points;
+                        if (points.length >= 4) {
+                            const startNode = elements[node.attrs.startNodeId];
+                            const endNode = elements[node.attrs.endNodeId];
+
+                            if (startNode && endNode) {
+                                node.attrs.points = [
+                                    startNode.x() + startNode.width() / 2, 
+                                    startNode.y() + startNode.height() / 2,
+                                    endNode.x() + endNode.width() / 2, 
+                                    endNode.y() + endNode.height() / 2
+                                ];
+                            }
+                        }
                     }
                 });
 
