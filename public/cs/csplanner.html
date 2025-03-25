@@ -53,6 +53,9 @@
             width: window.innerWidth - 60,
             height: window.innerHeight - 60,
         });
+
+        document.getElementById('saveBtn').addEventListener('click', saveDiagramToDB);
+        document.getElementById('loadBtn').addEventListener('click', loadDiagramFromDB);
         
         const layer = new Konva.Layer();
         stage.add(layer);
@@ -140,7 +143,7 @@
                 return;
             }
             
-            let dashConfig = parentType === 'interface' ? [10, 5] : []; //szaggatott vonal, ha az ős interface
+            let dashConfig = parentType === 'interface' ? [10, 5] : []; 
 
             const line = new Konva.Arrow({
                 points: getLinePoints(parent, child),
@@ -189,21 +192,47 @@
             });
             layer.draw();
         }
-        
-        document.getElementById('saveBtn').addEventListener('click', () => {
-            const json = stage.toJSON();
-            localStorage.setItem('diagram', json);
-            alert('Diagram saved!');
-        });
-        
-        document.getElementById('loadBtn').addEventListener('click', () => {
-            const json = localStorage.getItem('diagram');
-            if (json) {
-                stage.destroyChildren();
-                stage.add(Konva.Node.create(json, 'canvas-container'));
-                alert('Diagram loaded!');
+        async function saveDiagramToDB() {
+            const projectName = prompt("Add meg a projekt nevét:");
+            if (!projectName) return;
+
+            const json = stage.toJSON(); 
+
+            try {
+                const response = await fetch('/save-diagram', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ projectName, diagramData: json })
+                });
+
+                const message = await response.text();
+                alert(message);
+            } catch (error) {
+                console.error("❌ Hiba a diagram mentésénél:", error);
             }
-        });
+        }
+
+        async function loadDiagramFromDB() {
+            const projectName = prompt("Melyik diagramot töltsük be?");
+            if (!projectName) return;
+
+            try {
+                const response = await fetch(`/load-diagram?projectName=${encodeURIComponent(projectName)}`);
+
+                if (!response.ok) {
+                    alert("❌ Hiba a diagram mentéseket.");
+                    return;
+                }
+
+                const json = await response.json();
+
+                stage.destroyChildren(); 
+                stage.add(Konva.Node.create(json, 'canvas-container')); 
+                alert("✅ Diagram betöltve!");
+            } catch (error) {
+                console.error("❌ Hiba a diagram betöltésénel:", error);
+            }
+        }
     </script>
 </body>
 </html>

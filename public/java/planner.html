@@ -194,10 +194,10 @@
         }
         
         async function saveDiagramToDB() {
-            const projectName = prompt("Enter project name:");
+            const projectName = prompt("Add meg a projekt nevét:");
             if (!projectName) return;
 
-            const json = stage.toJSON(); // Convert stage to JSON
+            const json = stage.toJSON(); 
 
             try {
                 const response = await fetch('/save-diagram', {
@@ -209,53 +209,30 @@
                 const message = await response.text();
                 alert(message);
             } catch (error) {
-                console.error("❌ Error saving diagram:", error);
+                console.error("❌ Hiba a diagram mentésében.", error);
             }
         }
 
         async function loadDiagramFromDB() {
-            const projectName = prompt("Enter project name to load:");
+            const projectName = prompt("Melyik diagramot töltsük be?");
             if (!projectName) return;
 
             try {
                 const response = await fetch(`/load-diagram?projectName=${encodeURIComponent(projectName)}`);
 
                 if (!response.ok) {
-                    alert("❌ Diagram not found.");
+                    alert("❌ Diagram nem található.");
                     return;
                 }
 
                 const json = await response.json();
 
-                stage.destroyChildren(); // Clear existing diagram
-                stage.add(Konva.Node.create(json, 'canvas-container')); // Load from JSON
+                stage.destroyChildren(); 
+                stage.add(Konva.Node.create(json, 'canvas-container')); 
                 alert("✅ Diagram loaded!");
             } catch (error) {
-                console.error("❌ Error loading diagram:", error);
+                console.error("❌ Hiba a diagram betöltésénél:", error);
             }
-            node.on("dragmove", () => updateConnections(node));
-        }
-        function updateConnections(node) {
-            const nodeId = node.id();
-            
-            // Find all lines connected to this node
-            stage.find('Line').forEach(line => {
-                if (line.attrs.startNodeId === nodeId || line.attrs.endNodeId === nodeId) {
-                    const startNode = stage.findOne(`#${line.attrs.startNodeId}`);
-                    const endNode = stage.findOne(`#${line.attrs.endNodeId}`);
-                    
-                    if (startNode && endNode) {
-                        line.points([
-                            startNode.x() + startNode.width() / 2, 
-                            startNode.y() + startNode.height() / 2,
-                            endNode.x() + endNode.width() / 2, 
-                            endNode.y() + endNode.height() / 2
-                        ]);
-                    }
-                }
-            });
-
-            stage.batchDraw();
         }
     </script>
 </body>
