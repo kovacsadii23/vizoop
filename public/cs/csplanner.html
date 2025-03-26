@@ -33,10 +33,21 @@
     <div id="error-message"></div>
     <div class="container">
         <div id="sidebar">
-            <button id="addBtn">+</button>
-            <button id="connectBtn">Összekötés</button>
-            <button id="saveBtn">Mentés</button>
-            <button id="loadBtn">Betöltés</button>
+            <button id="addBtn" title="Új elem hozzáadása">
+                <img src="/assets/add.png" alt="Hozzáadás" width="24" height="24">
+            </button>
+            <button id="removeBtn" title="Törlés">
+                <img src="/assets/remove.png" alt="Törlés" width="24" height="24">
+            </button>
+            <button id="connectBtn" title="Összekötés">
+                <img src="/assets/connect.png" alt="Összekötés" width="24" height="24">
+            </button>
+            <button id="saveBtn" title="Mentés">
+                <img src="/assets/save.png" alt="Mentés" width="24" height="24">
+            </button>
+            <button id="loadBtn" title="Betöltés">
+                <img src="/assets/open.png" alt="Betöltés" width="24" height="24">
+            </button>
         </div>
         <div id="canvas-container"></div>
     </div>
@@ -75,11 +86,16 @@
         
         let selectedElements = [];
         let connecting = false;
+        let removing = false;
         
         document.getElementById('connectBtn').addEventListener('click', () => {
             connecting = true;
             selectedElements = [];
             alert('Kattins az ősre, majd a leszármaztatott osztályra.');
+        });
+        document.getElementById('removeBtn').addEventListener('click', () => {
+            removing = true;
+            alert('Jelölje ki mit szeretne törölni!');
         });
         
         function addElement(type, name) {
@@ -233,6 +249,29 @@
                 console.error("❌ Hiba a diagram betöltésénel:", error);
             }
         }
+        function removeElement(element) {
+            connections.forEach(conn => {
+                if (conn.child === element) {
+                    conn.child.hasParent = false;
+                }
+            });   
+            connections = connections.filter(conn => {
+                if (conn.parent === element || conn.child === element) {
+                    conn.line.destroy();
+                    return false;
+                }
+                return true;
+            });
+            element.destroy();
+            layer.draw();
+        }
+        stage.on('click', (event) => {
+            if (removing && event.target.parent) {
+                removeElement(event.target.parent);
+                removing = false;
+            }
+        });
+
     </script>
 </body>
 </html>
