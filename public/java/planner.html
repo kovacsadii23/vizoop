@@ -279,17 +279,8 @@
                 removeElement(event.target.parent);
                 removing = false;
             }
-            if (removingConnection && selectedElements.length === 1) {
-                const clickedElement = e.target;
-                selectedElements.push(clickedElement);
-
-                if (selectedElements.length === 2) {
-                    removeConnection(selectedElements[0], selectedElements[1]);
-                    selectedElements = []; 
-                    removingConnection = false; 
-                }
-            }
         });
+
         function removeConnection(element1, element2) {
             connections = connections.filter(conn => {
                 if ((conn.parent === element1 && conn.child === element2) || (conn.parent === element2 && conn.child === element1)) {
@@ -300,6 +291,18 @@
             });
             layer.draw();
         }
+        stage.on('click', (e) => {
+            if (removingConnection && selectedElements.length === 1) {
+                const clickedElement = e.target;
+                selectedElements.push(clickedElement);
+
+                if (selectedElements.length === 2) {
+                    removeConnection(selectedElements[0], selectedElements[1]);
+                    selectedElements = []; // Clear after removing
+                    removingConnection = false; // Exit connection removal mode
+                }
+            }
+        });
     </script>
 </body>
 </html>
