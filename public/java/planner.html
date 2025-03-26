@@ -87,6 +87,7 @@
         
         let selectedElements = [];
         let connecting = false;
+        let removing = false;
         
         document.getElementById('connectBtn').addEventListener('click', () => {
             connecting = true;
@@ -95,13 +96,8 @@
         });
         
         document.getElementById('removeBtn').addEventListener('click', () => {
+            removing = true;
             alert('Jelölje ki mit szeretne törölni!');
-            selectedElements = [];
-            stage.on('click', (e) => {
-                if (e.target.getParent()) {
-                    removeElement(e.target.getParent());
-                }
-            });
         });
 
         function addElement(type, name) {
