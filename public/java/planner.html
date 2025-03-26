@@ -279,6 +279,16 @@
                 removeElement(event.target.parent);
                 removing = false;
             }
+            if (removingConnection && selectedElements.length === 1) {
+                const clickedElement = e.target;
+                selectedElements.push(clickedElement);
+
+                if (selectedElements.length === 2) {
+                    removeConnection(selectedElements[0], selectedElements[1]);
+                    selectedElements = []; 
+                    removingConnection = false; 
+                }
+            }
         });
         function removeConnection(element1, element2) {
             connections = connections.filter(conn => {
