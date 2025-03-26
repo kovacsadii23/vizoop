@@ -42,8 +42,8 @@
             <button id="connectBtn" title="Összekötés">
                 <img src="/assets/connect.png" alt="Összekötés" width="24" height="24">
             </button>
-            <button id="disconnectBtn" title="Összekötés">
-                <img src="/assets/connect.png" alt="Összekötés" width="24" height="24">
+            <button id="disconnectBtn" title="Szétcsatolás">
+                <img src="/assets/disconnect.png" alt="Szétcsatolás" width="24" height="24">
             </button>
             <button id="saveBtn" title="Mentés">
                 <img src="/assets/save.png" alt="Mentés" width="24" height="24">
@@ -106,7 +106,7 @@
         });
         document.getElementById('disconnectBtn').addEventListener('click', () => {
             removingConnection = true;
-            alert('Click two connected elements to remove the connection.');
+            alert('Kattintson a két szétcsatolni kívánt elemre!');
         });
         function addElement(type, name) {
             const colors = { class: 'lightblue', abstract: 'lightcoral', interface: 'lightgreen' };
@@ -280,6 +280,16 @@
                 removing = false;
             }
         });
+        function removeConnection(element1, element2) {
+            connections = connections.filter(conn => {
+                if ((conn.parent === element1 && conn.child === element2) || (conn.parent === element2 && conn.child === element1)) {
+                    conn.line.destroy();
+                    return false;
+                }
+                return true;
+            });
+            layer.draw();
+        }
     </script>
 </body>
 </html>
