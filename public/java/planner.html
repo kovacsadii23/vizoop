@@ -253,6 +253,11 @@
             }
         }
         function removeElement(element) {
+            connections.forEach(conn => {
+                if (conn.child === element) {
+                    conn.child.hasParent = false;
+                }
+            });   
             connections = connections.filter(conn => {
                 if (conn.parent === element || conn.child === element) {
                     conn.line.destroy();
