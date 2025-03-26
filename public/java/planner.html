@@ -34,7 +34,10 @@
     <div class="container">
         <div id="sidebar">
             <button id="addBtn" title="Új elem hozzáadása">
-                <img src="/assets/add.png" alt="+" width="24" height="24">
+                <img src="/assets/add.png" alt="Hozzáadás" width="24" height="24">
+            </button>
+            <button id="removeBtn" title="Törlés">
+                <img src="/assets/remove.png" alt="Törlés" width="24" height="24">
             </button>
             <button id="connectBtn" title="Összekötés">
                 <img src="/assets/connect.png" alt="Összekötés" width="24" height="24">
@@ -45,6 +48,7 @@
             <button id="loadBtn" title="Betöltés">
                 <img src="/assets/open.png" alt="Betöltés" width="24" height="24">
             </button>
+
         </div>
         <div id="canvas-container"></div>
     </div>
@@ -90,6 +94,16 @@
             alert('Kattins az ősre, majd a leszármaztatott osztályra.');
         });
         
+        document.getElementById('removeBtn').addEventListener('click', () => {
+            alert('Jelölje ki mit szeretne törölni!');
+            selectedElements = [];
+            stage.on('click', (e) => {
+                if (e.target.getParent()) {
+                    removeElement(e.target.getParent());
+                }
+            });
+        });
+
         function addElement(type, name) {
             const colors = { class: 'lightblue', abstract: 'lightcoral', interface: 'lightgreen' };
             const group = new Konva.Group({
@@ -241,6 +255,17 @@
             } catch (error) {
                 console.error("❌ Hiba a diagram betöltésénél:", error);
             }
+        }
+        function removeElement(element) {
+            connections = connections.filter(conn => {
+                if (conn.parent === element || conn.child === element) {
+                    conn.line.destroy();
+                    return false;
+                }
+                return true;
+            });
+            element.destroy();
+            layer.draw();
         }
     </script>
 </body>
