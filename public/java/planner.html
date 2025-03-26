@@ -67,7 +67,7 @@
         
         document.querySelectorAll('.menu-item').forEach(item => {
             item.addEventListener('click', function () {
-                const name = prompt('Enter name:');
+                const name = prompt('Adjon meg egy nevet:');
                 if (name) addElement(this.dataset.type, name);
                 document.getElementById('menu').style.display = 'none';
             });
@@ -79,7 +79,7 @@
         document.getElementById('connectBtn').addEventListener('click', () => {
             connecting = true;
             selectedElements = [];
-            alert('Click on the superclass, then the subclass.');
+            alert('Kattins az ősre, majd a leszármaztatott osztályra.');
         });
         
         function addElement(type, name) {
@@ -194,7 +194,7 @@
         }
         
         async function saveDiagramToDB() {
-            const projectName = prompt("Add meg a projekt nevét:");
+            const projectName = prompt("Adja meg a projekt nevét:");
             if (!projectName) return;
 
             const json = stage.toJSON(); 
