@@ -42,6 +42,9 @@
             <button id="connectBtn" title="Összekötés">
                 <img src="/assets/connect.png" alt="Összekötés" width="24" height="24">
             </button>
+            <button id="disconnectBtn" title="Összekötés">
+                <img src="/assets/connect.png" alt="Összekötés" width="24" height="24">
+            </button>
             <button id="saveBtn" title="Mentés">
                 <img src="/assets/save.png" alt="Mentés" width="24" height="24">
             </button>
@@ -88,6 +91,8 @@
         let selectedElements = [];
         let connecting = false;
         let removing = false;
+        let removingConnection = false;
+        let connections = [];
         
         document.getElementById('connectBtn').addEventListener('click', () => {
             connecting = true;
@@ -99,7 +104,10 @@
             removing = true;
             alert('Jelölje ki mit szeretne törölni!');
         });
-
+        document.getElementById('disconnectBtn').addEventListener('click', () => {
+            removingConnection = true;
+            alert('Click two connected elements to remove the connection.');
+        });
         function addElement(type, name) {
             const colors = { class: 'lightblue', abstract: 'lightcoral', interface: 'lightgreen' };
             const group = new Konva.Group({
@@ -133,8 +141,6 @@
                 updateConnections();
             });
         }
-
-        let connections = [];
 
         function connectElements(parent, child) {
             const parentType = getElementType(parent);
