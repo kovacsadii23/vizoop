@@ -101,6 +101,10 @@
             removing = true;
             alert('Jelölje ki mit szeretne törölni!');
         });
+        document.getElementById('removeConnBtn').addEventListener('click', () => {
+            removingConnection = true;
+            alert('Kattintson egy kapcsolatra annak törléséhez.');
+        });
         
         function addElement(type, name) {
             const colors = { class: 'lightblue', abstract: 'lightcoral', interface: 'lightgreen' };
