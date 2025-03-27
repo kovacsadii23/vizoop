@@ -12,7 +12,7 @@
         .menu-item { padding: 5px; cursor: pointer; border-bottom: 1px solid #ddd; }
         .menu-item:last-child { border-bottom: none; }
         #canvas-container { flex: 1; border: 1px solid #000; height: calc(600px); margin-left: 0; width: 1400px;}
-        #addBtn, #connectBtn, #saveBtn, #loadBtn, #removeBtn {padding: 8px 12px; margin-bottom: 2px; margin-right: 10px; background-color: #0F52BA; color: white; border: none; border-radius: 60px;}
+        #addBtn, #connectBtn, #saveBtn, #loadBtn, #removeBtn, #removeConnBtn {padding: 8px 12px; margin-bottom: 2px; margin-right: 10px; background-color: #0F52BA; color: white; border: none; border-radius: 60px;}
     </style>
 </head>
 <body>
@@ -41,6 +41,9 @@
             </button>
             <button id="connectBtn" title="Összekötés">
                 <img src="/assets/connect.png" alt="Összekötés" width="24" height="24">
+            </button>
+            <button id="removeConnBtn" title="Kapcsolat törlése">
+                <img src="/assets/disconnect.png" alt="Kapcsolat törlése" width="24" height="24">
             </button>
             <button id="saveBtn" title="Mentés">
                 <img src="/assets/save.png" alt="Mentés" width="24" height="24">
@@ -87,6 +90,7 @@
         let selectedElements = [];
         let connecting = false;
         let removing = false;
+        let removingConnection = false;
         
         document.getElementById('connectBtn').addEventListener('click', () => {
             connecting = true;
@@ -265,10 +269,28 @@
             element.destroy();
             layer.draw();
         }
+        function removeConnection(line) {
+            connections = connections.filter(conn => {
+                if (conn.line === line) {
+                    conn.line.destroy();
+                    return false;
+                }
+                return true;
+            });
+
+            layer.draw();
+        }
+        
         stage.on('click', (event) => {
             if (removing && event.target.parent) {
                 removeElement(event.target.parent);
                 removing = false;
+            }
+        });
+        layer.on('click', (event) => {
+            if (removingConnection && event.target.className === 'Arrow') {
+                removeConnection(event.target);
+                removingConnection = false;
             }
         });
 
