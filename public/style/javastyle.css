@@ -268,3 +268,36 @@ label {
     border: none; 
     cursor: pointer;
 }
+.main-nav a {
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+/* Hamburger Menu */
+.menu-icon {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .main-nav {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        background-color: white;
+        width: 100%;
+        text-align: center;
+    }
+
+    .menu-icon {
+        display: block;
+    }
+
+    .menu-toggle:checked + .menu-icon + .main-nav {
+        display: flex;
+    }
+}
