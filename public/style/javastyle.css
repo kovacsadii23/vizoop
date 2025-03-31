@@ -282,7 +282,14 @@ label {
 .menu-toggle {
     display: none;
 }
+.flex-container {
+    display: flex;
+    gap: 20px;
+}
 
+.flex-item {
+    flex: 1;
+}
 /* Responsive Design */
 @media (max-width: 768px) {
     .main-nav {
@@ -309,5 +316,32 @@ label {
 
     .menu-toggle:checked + .menu-icon + .main-nav {
         display: flex;
+    }
+    .flex-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .flex-item {
+        width: 100%;
+    }
+
+    .code-snippet {
+        margin: 0.5rem 0;
+    }
+
+    button {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    canvas {
+        margin: 0.5rem auto;
+        display: block;
+    }
+
+    #errorOutput, #successOutput {
+        margin-top: 10px;
+        font-size: 1rem;
     }
 }

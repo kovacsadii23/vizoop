@@ -34,8 +34,8 @@
             és konkrét metódusokat is, amelyeknek van megvalósításuk.
         </p>
 
-        <div style="display: flex; gap: 20px;">
-            <div style="flex: 1;">
+        <div class="flex-container">
+            <div class ="flex-item">
                 <h3>Hibás próbálkozás</h3>
                 <div class="code-snippet">
                     <pre><code>
@@ -49,7 +49,7 @@ Forma forma = new Forma(); // Ez hibát okoz
                 <div id="errorOutput" style="margin-top: 20px; color: red; font-weight: bold;"></div>
             </div>
 
-            <div style="flex: 1;">
+            <div class="flex-item">
                 <h3>Helyes megoldás</h3>
                 <div class="code-snippet">
                     <pre><code>
@@ -76,7 +76,6 @@ forma.Rajzol(); // Ez helyesen működik
         <script>
             function tryInstantiateAbstractClass() {
                 try {
-                    // Szimuláljuk az absztrakt osztály példányosítását
                     eval(`
 abstract class Forma {
     public abstract void Rajzol();
@@ -91,7 +90,6 @@ Forma forma = new Forma();
 
             function tryCorrectInstantiation() {
                 try {
-                    // Szimuláljuk a helyes példányosítást
                     class Forma {
                         Rajzol() {
                             throw new Error("Absztrakt metódus. Implementálni kell a leszármazott osztályban.");
