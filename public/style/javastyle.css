@@ -279,6 +279,9 @@ label {
     font-size: 24px;
     cursor: pointer;
 }
+.menu-toggle {
+    display: none;
+}
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -288,7 +291,7 @@ label {
         position: absolute;
         top: 60px;
         left: 0;
-        background-color: white;
+        background-color: #333;
         width: 100%;
         text-align: center;
     }
