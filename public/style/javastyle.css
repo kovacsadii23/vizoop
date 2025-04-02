@@ -58,10 +58,14 @@ nav a:hover {
 .input-group {
     margin: 10px 0;
     text-align: left;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
-
 .input-group input {
-    margin-right: 10px;
+    margin: 5px 0;
+    flex: 1;
+    min-width: 150px;
 }
 
 .button {
@@ -331,7 +335,7 @@ label {
         padding: 0.5rem;
     }
     input[type="text"], input[type="number"] {
-        width: 100%;
+        width: 90%;
         padding: 0.3rem;
         margin: 0.5rem 0;
     }
@@ -381,5 +385,12 @@ label {
     .sidebar.show + .toggle-arrow {
         left: 200px;
     }
-    
+    .input-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .input-group input {
+        margin-right: 0;
+    }
 }
