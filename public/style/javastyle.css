@@ -283,6 +283,38 @@ label {
 .flex-item {
     flex: 1;
 }
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 250px;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    transition: transform 0.3s ease;
+}
+
+.sidebar.hidden {
+    transform: translateX(-100%);
+}
+
+.toggle-arrow {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    cursor: pointer;
+    transition: left 0.3s ease;
+}
+
+.sidebar.show + .toggle-arrow {
+    left: 250px;
+}
+
 
 @media (max-width: 768px) {
     .main-nav {
@@ -337,45 +369,17 @@ label {
         margin-top: 10px;
         font-size: 1rem;
     }
-    .sidebar {
-        width: 20%;
-        float: left;
-        background-color: #f4f4f4;
-        padding: 10px;
-        box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
-    }
 
-    .sidebar.hidden {
-        transform: translateX(-100%);
+    .sidebar {
+        width: 200px;
     }
 
     .toggle-arrow {
-        position: fixed;
         left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        background-color: #333;
-        color: #fff;
-        padding: 5px;
-        cursor: pointer;
-        transition: left 0.3s ease;
     }
 
     .sidebar.show + .toggle-arrow {
-        left: 250px;
+        left: 200px;
     }
-
-    @media (max-width: 768px) {
-        .sidebar {
-            width: 200px;
-        }
-
-        .toggle-arrow {
-            left: 0;
-        }
-
-        .sidebar.show + .toggle-arrow {
-            left: 200px;
-        }
-    }
+    
 }
