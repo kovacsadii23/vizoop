@@ -307,7 +307,7 @@ label {
     }
     input[type="text"], input[type="number"] {
         width: 100%;
-        padding: 0.5rem;
+        padding: 0.3rem;
         margin: 0.5rem 0;
     }
     .menu-icon {
@@ -331,7 +331,7 @@ label {
     }
 
     button {
-        width: 100%;
+        width: 90%;
         margin-top: 0.5rem;
     }
 
