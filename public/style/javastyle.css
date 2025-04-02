@@ -125,14 +125,14 @@ label {
     font-weight: bold;
 }
 .icon-button img {
-    filter: brightness(0) invert(1); /* Makes the image appear white */
+    filter: brightness(0) invert(1); 
     width: 24px;
     height: 24px;
-    transition: filter 0.3s ease; /* Smooth transition for hover effect */
+    transition: filter 0.3s ease; 
 }
 
 .icon-button img:hover {
-    filter: brightness(1) invert(0); /* Reverts to original color on hover */
+    filter: brightness(1) invert(0);
 }
 .tooltip {
     position: relative;
@@ -170,19 +170,12 @@ label {
 .mermaid .classBlock {
     display: flex;
     align-items: center;
-    padding-left: 50px; /* Space for the image */
+    padding-left: 50px; 
 }
 .mermaid .classBlock img {
-    margin-right: 10px; /* Space between image and class name */
-    width: 40px; /* Size of the image */
+    margin-right: 10px; 
+    width: 40px; 
     height: 40px;
-}
-.sidebar {
-    width: 20%;
-    float: left;
-    background-color: #f4f4f4;
-    padding: 10px;
-    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
 }
 
 #fileList {
@@ -290,7 +283,7 @@ label {
 .flex-item {
     flex: 1;
 }
-/* Responsive Design */
+
 @media (max-width: 768px) {
     .main-nav {
         display: none;
@@ -343,5 +336,50 @@ label {
     #errorOutput, #successOutput {
         margin-top: 10px;
         font-size: 1rem;
+    }
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 250px;
+        background-color: #333;
+        color: #fff;
+        padding: 10px;
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar.hidden {
+        transform: translateX(-100%);
+    }
+
+    .toggle-arrow {
+        position: fixed;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: #333;
+        color: #fff;
+        padding: 5px;
+        cursor: pointer;
+        transition: left 0.3s ease;
+    }
+
+    .sidebar.show + .toggle-arrow {
+        left: 250px;
+    }
+
+    @media (max-width: 768px) {
+        .sidebar {
+            width: 200px;
+        }
+
+        .toggle-arrow {
+            left: 0;
+        }
+
+        .sidebar.show + .toggle-arrow {
+            left: 200px;
+        }
     }
 }

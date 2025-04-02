@@ -24,10 +24,11 @@
         <a href="planner.html">Tervező</a>
         <a href="../cs/csclass.html" class="icon-button"><img src="/assets/csharp.png" alt="Java" title="Java" width="24" height="24"></a>
     </nav>
-    <div class="sidebar">
+    <div class="sidebar hidden" id="sidebar">
         <h3>Mentett Osztályok</h3>
         <ul id="fileList"></ul>
     </div>
+    <div class="toggle-arrow" onclick="toggleSidebar()">&rarr;</div>
     <div class="container">
         <h2>Hozzon létre egy osztályt!</h2>
         
@@ -156,14 +157,17 @@
                 })
                 .catch(error => console.error('Error fetching files:', error));
         }
-
-
+        function toggleSidebar() {
+            const sidebar = document.getElementById("sidebar");
+            sidebar.classList.toggle("hidden");
+        }
         function loadFile(fileName) {
             fetch(`/get-file?fileName=${encodeURIComponent(fileName)}`)
                 .then(response => response.text())
                 .then(content => {
                     document.getElementById('classOutput').innerHTML = `<code>${content}</code>`;
                     currentFileName = fileName.replace('.java', ''); 
+                    toggleSidebar();
                 })
                 .catch(error => console.error('Error loading file:', error));
         }
