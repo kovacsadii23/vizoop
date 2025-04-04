@@ -286,13 +286,13 @@
             layer.draw();
         }
         
-        stage.on('click', (event) => {
+        stage.on('click touchstart', (event) => {
             if (removing && event.target.parent) {
                 removeElement(event.target.parent);
                 removing = false;
             }
         });
-        layer.on('click', (event) => {
+        layer.on('click touchstart', (event) => {
             if (removingConnection && event.target.className === 'Arrow') {
                 removeConnection(event.target);
                 removingConnection = false;
