@@ -12,48 +12,16 @@
         .menu-item { padding: 5px; cursor: pointer; border-bottom: 1px solid #ddd; }
         .menu-item:last-child { border-bottom: none; }
         #canvas-container { flex: 1; border: 1px solid #000; height: calc(600px); margin-left: 0; width: 1400px;}
-        #addBtn, #connectBtn, #saveBtn, #loadBtn, #removeBtn, #removeConnBtn{padding: 8px 12px; margin-bottom: 2px; margin-right: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 60px;}
+        #addBtn, #connectBtn, #saveBtn, #loadBtn, #removeBtn, #removeConnBtn {padding: 8px; margin: 5px; background-color: #4CAF50; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;}
+        #arrowToggle { position: absolute; left: 0; top: 50%; transform: translateY(-50%); background-color: #4CAF50; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer; display: none; }
         @media (max-width: 768px) {
-        #canvas-container {
-            width: 100vw;
-            height: 100vh;
-            margin: 0;
-            border: 1px solid #000;
+            #canvas-container { width: 100%; height: calc(100vh - 60px); }
+            #arrowToggle { display: block; }
+            .container { flex-direction: column; }
+            #sidebar { display: none; background-color: rgba(3, 3, 3, 0.359); padding: 10px; border-radius: 10px; }
+            .phone-btn { display: flex; flex-direction: row; align-items: center; gap: 5px;} 
+            .phone-btn span { font-size: 14px; color: white; }
         }
-        #sidebar {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100vh;
-            background-color: #4CAF50;
-            padding: 10px;
-            z-index: 50;
-            transition: transform 0.3s ease;
-            transform: translateX(-100%);
-        }
-        #sidebar.active {
-            transform: translateX(0);
-        }
-        #sidebar button {
-            margin: 10px 0;
-            width: 100%;
-        }
-        #openSidebarBtn {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            background-color: #4CAF50;
-            color: #4CAF50;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            z-index: 1000;
-            cursor: pointer;
-            font-size: 18px;
-            display: block;
-        }
-    }
     </style>
 </head>
 <body>
@@ -73,29 +41,16 @@
         <a href="planner.html">Tervező</a>
         <a href="../cs/csplanner.html" class="icon-button"><img src="/assets/csharp.png" alt="Java" title="Java" width="24" height="24"></a>
     </nav>
+    <div id="arrowToggle">&#9664;</div>
     <div id="error-message"></div>
-    <button id="openSidebarBtn" style="display: none;">➡️</button>
     <div class="container">
         <div id="sidebar">
-            <button id="addBtn" title="Új elem hozzáadása">
-                <img src="/assets/add.png" alt="Hozzáadás" width="24" height="24">
-            </button>
-            <button id="removeBtn" title="Törlés">
-                <img src="/assets/remove.png" alt="Törlés" width="24" height="24">
-            </button>
-            <button id="connectBtn" title="Összekötés">
-                <img src="/assets/connect.png" alt="Összekötés" width="24" height="24">
-            </button>
-            <button id="removeConnBtn" title="Kapcsolat törlése">
-                <img src="/assets/disconnect.png" alt="Kapcsolat törlése" width="24" height="24">
-            </button>
-            <button id="saveBtn" title="Mentés">
-                <img src="/assets/save.png" alt="Mentés" width="24" height="24">
-            </button>
-            <button id="loadBtn" title="Betöltés">
-                <img src="/assets/open.png" alt="Betöltés" width="24" height="24">
-            </button>
-
+            <div class="phone-btn"><button id="addBtn" title="Új elem hozzáadása"><img src="/assets/add.png" alt="Hozzáadás" width="24" height="24"></button><span>Hozzáadás</span></div>
+            <div class="phone-btn"><button id="removeBtn" title="Törlés"><img src="/assets/remove.png" alt="Törlés" width="24" height="24"></button><span>Törlés</span></div>
+            <div class="phone-btn"><button id="connectBtn" title="Összekötés"><img src="/assets/connect.png" alt="Összekötés" width="24" height="24"></button><span>Összekötés</span></div>
+            <div class="phone-btn"><button id="removeConnBtn" title="Kapcsolat törlése"><img src="/assets/disconnect.png" alt="Kapcsolat törlése" width="24" height="24"></button><span>Kapcsolat törlése</span></div>
+            <div class="phone-btn"><button id="saveBtn" title="Mentés"><img src="/assets/save.png" alt="Mentés" width="24" height="24"></button><span>Mentés</span></div>
+            <div class="phone-btn"><button id="loadBtn" title="Betöltés"><img src="/assets/open.png" alt="Betöltés" width="24" height="24"></button><span>Betöltés</span></div>
         </div>
         <div id="canvas-container"></div>
     </div>
@@ -107,6 +62,21 @@
     </div>
     
     <script>
+        const arrowToggle = document.getElementById("arrowToggle");
+        const sidebar = document.getElementById("sidebar");
+        const buttons = document.querySelectorAll("#sidebar button");
+        arrowToggle.addEventListener("click", () => {
+            sidebar.style.display = sidebar.style.display === "block" ? "none" : "block";
+            arrowToggle.innerHTML = sidebar.style.display === "block" ? "&#9664;" : "&#9654;";
+        });
+        buttons.forEach(button => {
+            button.addEventListener("click", () => {
+                if (window.innerWidth <= 768) {
+                    sidebar.style.display = "none";
+                    arrowToggle.innerHTML = "&#9654;";
+                }
+            });
+        });
         const stage = new Konva.Stage({
             container: 'canvas-container',
             width: window.innerWidth - 60,
@@ -131,19 +101,7 @@
                 document.getElementById('menu').style.display = 'none';
             });
         });
-        const sidebar = document.getElementById('sidebar');
-        const openSidebarBtn = document.getElementById('openSidebarBtn');
-        openSidebarBtn.addEventListener('click', () => {
-            sidebar.classList.add('active');
-        });
-        const buttons = ['#addBtn', '#connectBtn', '#saveBtn', '#loadBtn', '#removeBtn', '#removeConnBtn'];
-        buttons.forEach(id => {
-            document.querySelector(id).addEventListener('click', () => {
-                if (window.innerWidth <= 768) { 
-                    sidebar.classList.remove('active');
-                }
-            });
-        });
+        
         
         let selectedElements = [];
         let connecting = false;
@@ -183,7 +141,7 @@
             layer.add(group);
             layer.draw();
 
-            group.on('click', () => {
+            group.on('click touchstart', () => {
                 if (connecting) {
                     selectedElements.push(group);
                     if (selectedElements.length === 2) {
@@ -331,7 +289,7 @@
             element.destroy();
             layer.draw();
         }
-        stage.on('click', (event) => {
+        stage.on('click touchstart', (event) => {
             if (removing && event.target.parent) {
                 removeElement(event.target.parent);
                 removing = false;
@@ -349,7 +307,7 @@
 
             layer.draw();
         }
-        layer.on('click', (event) => {
+        layer.on('click touchstart', (event) => {
             if (removingConnection && event.target.className === 'Arrow') {
                 removeConnection(event.target);
                 removingConnection = false;
