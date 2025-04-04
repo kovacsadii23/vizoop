@@ -13,6 +13,32 @@
         .menu-item:last-child { border-bottom: none; }
         #canvas-container { flex: 1; border: 1px solid #000; height: calc(600px); margin-left: 0; width: 1400px;}
         #addBtn, #connectBtn, #saveBtn, #loadBtn, #removeBtn, #removeConnBtn{padding: 8px 12px; margin-bottom: 2px; margin-right: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 60px;}
+        @media (max-width: 768px) {
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            border: none;
+        }
+        #sidebar {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            background-color: #4CAF50;
+            padding: 10px;
+            transition: transform 0.3s ease;
+            transform: translateX(-100%);
+        }
+        #sidebar.active {
+            transform: translateX(0);
+        }
+        #sidebar button {
+            margin: 10px 0;
+            width: 100%;
+        }
+    }
     </style>
 </head>
 <body>
@@ -87,6 +113,15 @@
                 const name = prompt('Adjon meg egy nevet:');
                 if (name) addElement(this.dataset.type, name);
                 document.getElementById('menu').style.display = 'none';
+            });
+        });
+        const sidebar = document.getElementById('sidebar');
+        const buttons = ['#addBtn', '#connectBtn', '#saveBtn', '#loadBtn', '#removeBtn', '#removeConnBtn'];
+        buttons.forEach(id => {
+            document.querySelector(id).addEventListener('click', () => {
+                if (window.innerWidth <= 768) { 
+                    sidebar.classList.remove('active');
+                }
             });
         });
         
