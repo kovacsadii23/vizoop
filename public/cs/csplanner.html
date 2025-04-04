@@ -125,7 +125,7 @@
             layer.add(group);
             layer.draw();
 
-            group.on('click', () => {
+            group.on('click touchstart', () => {
                 if (connecting) {
                     selectedElements.push(group);
                     if (selectedElements.length === 2) {
