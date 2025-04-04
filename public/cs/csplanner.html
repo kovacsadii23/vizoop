@@ -12,13 +12,13 @@
         .menu-item { padding: 5px; cursor: pointer; border-bottom: 1px solid #ddd; }
         .menu-item:last-child { border-bottom: none; }
         #canvas-container { flex: 1; border: 1px solid #000; height: calc(600px); margin-left: 0; width: 1400px;}
-        #addBtn, #connectBtn, #saveBtn, #loadBtn, #removeBtn, #removeConnBtn {padding: 8px 12px; margin-bottom: 2px; margin-right: 10px; background-color: #0F52BA; color: white; border: none; border-radius: 60px;}
+        #addBtn, #connectBtn, #saveBtn, #loadBtn, #removeBtn, #removeConnBtn {padding: 12px; margin: 5px; background-color: #0F52BA; color: white; border: none; border-radius: 50%;}
         #arrowToggle { position: absolute; right: 0; top: 50%; transform: translateY(-50%); background-color: #0F52BA; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer; display: none; }
         @media (max-width: 768px) {
-            #canvas-container { width: 100%; height: calc(100vh - 100px); }
+            #canvas-container { width: 100%; height: calc(100vh - 60px); }
             #arrowToggle { display: block; }
             .container { flex-direction: column; }
-            #sidebar { margin-bottom: 10px; }
+            #sidebar { display: none; background-color: rgba(50, 50, 50, 0.8); padding: 10px; border-radius: 10px; } 
         }
     </style>
 </head>
@@ -75,7 +75,7 @@
         const sidebar = document.getElementById("sidebar");
         arrowToggle.addEventListener("click", () => {
             sidebar.style.display = sidebar.style.display === "block" ? "none" : "block";
-            arrowToggle.innerHTML = sidebar.style.display === "block" ? "&#9654;" : "&#9664;";
+            arrowToggle.innerHTML = sidebar.style.display === "block" ? "&#9664;" : "&#9654;";
         });
         const stage = new Konva.Stage({
             container: 'canvas-container',
