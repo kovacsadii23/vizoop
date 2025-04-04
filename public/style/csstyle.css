@@ -257,5 +257,132 @@ label {
     border: none; 
     cursor: pointer;
 }
+.main-nav a {
+    margin: 0 10px;
+    text-decoration: none;
+}
+.menu-icon {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+.menu-toggle {
+    display: none;
+}
+.flex-container {
+    display: flex;
+    gap: 20px;
+}
+
+.flex-item {
+    flex: 1;
+}
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 250px;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    transition: transform 0.3s ease;
+}
+
+.sidebar.hidden {
+    transform: translateX(-100%);
+}
+
+.toggle-arrow {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    cursor: pointer;
+    transition: left 0.3s ease;
+}
+
+.sidebar.show + .toggle-arrow {
+    left: 250px;
+}
+@media (max-width: 768px) {
+    .main-nav {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        background-color: #333;
+        width: 100%;
+        text-align: center;
+    }
+    .container, .content, .code-snippet, .object-view-container {
+        padding: 0.5rem;
+    }
+    input[type="text"], input[type="number"] {
+        width: 90%;
+        padding: 0.3rem;
+        margin: 0.5rem 0;
+    }
+    .menu-icon {
+        display: block;
+    }
+
+    .menu-toggle:checked + .menu-icon + .main-nav {
+        display: flex;
+    }
+    .flex-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .flex-item {
+        width: 100%;
+    }
+
+    .code-snippet {
+        margin: 0.5rem 0;
+    }
+
+    button {
+        width: 90%;
+        margin-top: 0.5rem;
+    }
+
+    canvas {
+        margin: 0.5rem auto;
+        display: block;
+    }
+
+    #errorOutput, #successOutput {
+        margin-top: 10px;
+        font-size: 1rem;
+    }
+
+    .sidebar {
+        width: 200px;
+    }
+
+    .toggle-arrow {
+        left: 0;
+    }
+
+    .sidebar.show + .toggle-arrow {
+        left: 200px;
+    }
+    .input-group {
+        flex-direction: column;
+        align-items: stretch;
+        margin-left: 1rem;
+    }
+
+    .input-group input {
+        margin-right: 1rem;
+    } 
+}
+
 
 
