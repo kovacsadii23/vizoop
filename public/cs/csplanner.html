@@ -63,9 +63,18 @@
     <script>
         const arrowToggle = document.getElementById("arrowToggle");
         const sidebar = document.getElementById("sidebar");
+        const buttons = document.querySelectorAll("#sidebar button");
         arrowToggle.addEventListener("click", () => {
             sidebar.style.display = sidebar.style.display === "block" ? "none" : "block";
             arrowToggle.innerHTML = sidebar.style.display === "block" ? "&#9664;" : "&#9654;";
+        });
+        buttons.forEach(button => {
+            button.addEventListener("click", () => {
+                if (window.innerWidth <= 768) {
+                    sidebar.style.display = "none";
+                    arrowToggle.innerHTML = "&#9654;";
+                }
+            });
         });
         const stage = new Konva.Stage({
             container: 'canvas-container',
