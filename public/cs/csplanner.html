@@ -19,7 +19,8 @@
             #arrowToggle { display: block; }
             .container { flex-direction: column; }
             #sidebar { display: none; background-color: rgba(50, 50, 50, 0.8); padding: 10px; border-radius: 10px; }
-            #addBtn, #connectBtn, #saveBtn, #loadBtn, #removeBtn, #removeConnBtn {padding: 8px; margin: 5px; background-color: #0F52BA; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;} 
+            .phone-btn { display: flex; flex-direction: row; align-items: center; gap: 5px; }
+            .phone-btn span { font-size: 14px; color: white; }
         }
     </style>
 </head>
@@ -43,24 +44,12 @@
     <div id="error-message"></div>
     <div class="container">
         <div id="sidebar">
-            <button id="addBtn" title="Új elem hozzáadása">
-                <img src="/assets/add.png" alt="Hozzáadás" width="24" height="24">
-            </button>
-            <button id="removeBtn" title="Törlés">
-                <img src="/assets/remove.png" alt="Törlés" width="24" height="24">
-            </button>
-            <button id="connectBtn" title="Összekötés">
-                <img src="/assets/connect.png" alt="Összekötés" width="24" height="24">
-            </button>
-            <button id="removeConnBtn" title="Kapcsolat törlése">
-                <img src="/assets/disconnect.png" alt="Kapcsolat törlése" width="24" height="24">
-            </button>
-            <button id="saveBtn" title="Mentés">
-                <img src="/assets/save.png" alt="Mentés" width="24" height="24">
-            </button>
-            <button id="loadBtn" title="Betöltés">
-                <img src="/assets/open.png" alt="Betöltés" width="24" height="24">
-            </button>
+            <div class="phone-btn"><button id="addBtn" title="Új elem hozzáadása"><img src="/assets/add.png" alt="Hozzáadás" width="24" height="24"></button><span>Hozzáadás</span></div>
+            <div class="phone-btn"><button id="removeBtn" title="Törlés"><img src="/assets/remove.png" alt="Törlés" width="24" height="24"></button><span>Törlés</span></div>
+            <div class="phone-btn"><button id="connectBtn" title="Összekötés"><img src="/assets/connect.png" alt="Összekötés" width="24" height="24"></button><span>Összekötés</span></div>
+            <div class="phone-btn"><button id="removeConnBtn" title="Kapcsolat törlése"><img src="/assets/disconnect.png" alt="Kapcsolat törlése" width="24" height="24"></button><span>Kapcsolat törlése</span></div>
+            <div class="phone-btn"><button id="saveBtn" title="Mentés"><img src="/assets/save.png" alt="Mentés" width="24" height="24"></button><span>Mentés</span></div>
+            <div class="phone-btn"><button id="loadBtn" title="Betöltés"><img src="/assets/open.png" alt="Betöltés" width="24" height="24"></button><span>Betöltés</span></div>
         </div>
         <div id="canvas-container"></div>
     </div>
