@@ -38,6 +38,19 @@
             margin: 10px 0;
             width: 100%;
         }
+        #openSidebarBtn {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 20;
+            cursor: pointer;
+            font-size: 18px;
+        }
     }
     </style>
 </head>
@@ -60,6 +73,7 @@
     </nav>
     <div id="error-message"></div>
     <div class="container">
+        <button id="openSidebarBtn" style="display: none;">➡️</button>
         <div id="sidebar">
             <button id="addBtn" title="Új elem hozzáadása">
                 <img src="/assets/add.png" alt="Hozzáadás" width="24" height="24">
@@ -116,6 +130,10 @@
             });
         });
         const sidebar = document.getElementById('sidebar');
+        const openSidebarBtn = document.getElementById('openSidebarBtn');
+        openSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.add('active');
+        });
         const buttons = ['#addBtn', '#connectBtn', '#saveBtn', '#loadBtn', '#removeBtn', '#removeConnBtn'];
         buttons.forEach(id => {
             document.querySelector(id).addEventListener('click', () => {
