@@ -12,13 +12,14 @@
         .menu-item { padding: 5px; cursor: pointer; border-bottom: 1px solid #ddd; }
         .menu-item:last-child { border-bottom: none; }
         #canvas-container { flex: 1; border: 1px solid #000; height: calc(600px); margin-left: 0; width: 1400px;}
-        #addBtn, #connectBtn, #saveBtn, #loadBtn, #removeBtn, #removeConnBtn {padding: 12px; margin: 5px; background-color: #0F52BA; color: white; border: none; border-radius: 50%;}
+        #addBtn, #connectBtn, #saveBtn, #loadBtn, #removeBtn, #removeConnBtn {padding: 8px; margin: 5px; background-color: #0F52BA; color: white; border: none; border-radius: 50%;}
         #arrowToggle { position: absolute; right: 0; top: 50%; transform: translateY(-50%); background-color: #0F52BA; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer; display: none; }
         @media (max-width: 768px) {
             #canvas-container { width: 100%; height: calc(100vh - 60px); }
             #arrowToggle { display: block; }
             .container { flex-direction: column; }
-            #sidebar { display: none; background-color: rgba(50, 50, 50, 0.8); padding: 10px; border-radius: 10px; } 
+            #sidebar { display: none; background-color: rgba(50, 50, 50, 0.8); padding: 10px; border-radius: 10px; }
+            #addBtn, #connectBtn, #saveBtn, #loadBtn, #removeBtn, #removeConnBtn {padding: 8px; margin: 5px; background-color: #333; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;} 
         }
     </style>
 </head>
