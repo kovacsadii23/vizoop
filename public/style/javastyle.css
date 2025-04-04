@@ -9,6 +9,9 @@ header {
     padding: 10px;
     text-align: center;
     color: white;
+    width: 100%;      /* Ensure full width */
+    box-sizing: border-box; /* Include padding in the width calculation */
+    margin: 0;        /* Remove default margin */
 }
 
 nav {
