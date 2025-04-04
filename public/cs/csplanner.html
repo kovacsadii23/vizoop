@@ -13,8 +13,10 @@
         .menu-item:last-child { border-bottom: none; }
         #canvas-container { flex: 1; border: 1px solid #000; height: calc(600px); margin-left: 0; width: 1400px;}
         #addBtn, #connectBtn, #saveBtn, #loadBtn, #removeBtn, #removeConnBtn {padding: 8px 12px; margin-bottom: 2px; margin-right: 10px; background-color: #0F52BA; color: white; border: none; border-radius: 60px;}
+        #arrowToggle { position: absolute; right: 0; top: 50%; transform: translateY(-50%); background-color: #0F52BA; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer; display: none; }
         @media (max-width: 768px) {
             #canvas-container { width: 100%; height: calc(100vh - 100px); }
+            #arrowToggle { display: block; }
             .container { flex-direction: column; }
             #sidebar { margin-bottom: 10px; }
         }
@@ -36,6 +38,7 @@
         <a href="csplanner.html">Tervező</a>
         <a href="../java/planner.html" class="icon-button"><img src="/assets/java.png" alt="Java" title="Java" width="24" height="24"></a>
     </nav>
+    <div id="arrowToggle">&#9664;</div>
     <div id="error-message"></div>
     <div class="container">
         <div id="sidebar">
@@ -68,6 +71,12 @@
     </div>
     
     <script>
+        const arrowToggle = document.getElementById("arrowToggle");
+        const sidebar = document.getElementById("sidebar");
+        arrowToggle.addEventListener("click", () => {
+            sidebar.style.display = sidebar.style.display === "block" ? "none" : "block";
+            arrowToggle.innerHTML = sidebar.style.display === "block" ? "&#9654;" : "&#9664;";
+        });
         const stage = new Konva.Stage({
             container: 'canvas-container',
             width: window.innerWidth - 60,
